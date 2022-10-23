@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
+	<title>stateRestore example - Predefined States from Ajax</title>
+	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
+	<link rel="stylesheet" type="text/css" href="../../../Buttons/css/buttons.dataTables.css">
+	<link rel="stylesheet" type="text/css" href="../../css/stateRestore.dataTables.css">
+	<link rel="stylesheet" type="text/css" href="../../../Scroller/css/scroller.dataTables.css">
+	<link rel="stylesheet" type="text/css" href="../../../../examples/resources/syntax/shCore.css">
+	<link rel="stylesheet" type="text/css" href="../../../../examples/resources/demo.css">
+	<style type="text/css" class="init">
+	
+	</style>
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script type="text/javascript" language="javascript" src="../../../../media/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" language="javascript" src="../../js/dataTables.stateRestore.js"></script>
+	<script type="text/javascript" language="javascript" src="../../../Buttons/js/dataTables.buttons.js"></script>
+	<script type="text/javascript" language="javascript" src="../../../Scroller/js/dataTables.scroller.js"></script>
+	<script type="text/javascript" language="javascript" src="../../../../examples/resources/syntax/shCore.js"></script>
+	<script type="text/javascript" language="javascript" src="../../../../examples/resources/demo.js"></script>
+	<script type="text/javascript" language="javascript" class="init">
+	
+
+$(document).ready(function() {
+    $('#example').DataTable({
+        dom: 'Blfrtip',
+        ajax: {
+          url: "../data/2500States.txt",
+          dataSrc: 'data'
+        },
+        deferRender:    true,
+        scrollY:        200,
+        scrollCollapse: true,
+        scroller:       true,
+        buttons:['savedStates']
+    });
+});
+
+
+	</script>
+</head>
+<body class="dt-example">
+	<div class="container">
+		<section>
+			<h1>stateRestore example <span>Predefined States from Ajax</span></h1>
+			<div class="info">
+				<p>This example shows how predefined states can be supplied using the <a href="//datatables.net/reference/option/stateRestore"><code class="option" title=
+				"DataTables initialisation option">stateRestore</code></a> extension. The state present under the <code>Saved States</code> button contains a predefined state that
+				will scroll the table and apply an order to the third column.</p>
+				<p>Renaming, updating and removing this state could all be disabled using the <a href="//datatables.net/reference/option/stateRestore.rename"><code class="option"
+				title="DataTables initialisation option">stateRestore.rename</code></a>, <a href="//datatables.net/reference/option/stateRestore.save"><code class="option" title=
+				"DataTables initialisation option">stateRestore.save</code></a> and <a href="//datatables.net/reference/option/stateRestore.remove"><code class="option" title=
+				"DataTables initialisation option">stateRestore.remove</code></a> options. Because it is built into the ajax data that is sent initially, the state will always be
+				present on a new page load, even if it has been removed previously.</p>
+			</div>
+			<div class="demo-html">
+				<table id="example" class="display nowrap" style="width:100%">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>First name</th>
+							<th>Last name</th>
+							<th>ZIP / Post code</th>
+							<th>Country</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<ul class="tabs">
+				<li class="active">Javascript</li>
+				<li>HTML</li>
+				<li>CSS</li>
+				<li>Ajax</li>
+				<li>Server-side script</li>
+			</ul>
+			<div class="tabs">
+				<div class="js">
+					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
+    $('#example').DataTable({
+        dom: 'Blfrtip',
+        ajax: {
+          url: &quot;../data/2500States.txt&quot;,
+          dataSrc: 'data'
+        },
+        deferRender:    true,
+        scrollY:        200,
+        scrollCollapse: true,
+        scroller:       true,
+        buttons:['savedStates']
+    });
+});</code>
+					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
+					<ul>
+						<li>
+							<a href="https://code.jquery.com/jquery-3.5.1.js">https://code.jquery.com/jquery-3.5.1.js</a>
+						</li>
+						<li>
+							<a href="../../../../media/js/jquery.dataTables.js">../../../../media/js/jquery.dataTables.js</a>
+						</li>
+						<li>
+							<a href="../../js/dataTables.stateRestore.js">../../js/dataTables.stateRestore.js</a>
+						</li>
+						<li>
+							<a href="../../../Buttons/js/dataTables.buttons.js">../../../Buttons/js/dataTables.buttons.js</a>
+						</li>
+						<li>
+							<a href="../../../Scroller/js/dataTables.scroller.js">../../../Scroller/js/dataTables.scroller.js</a>
+						</li>
+					</ul>
+				</div>
+				<div class="table">
+					<p>The HTML shown below is the raw HTML table element, before it has been enhanced by DataTables:</p>
+				</div>
+				<div class="css">
+					<div>
+						<p>This example uses a little bit of additional CSS beyond what is loaded from the library files (below), in order to correctly display the table. The
+						additional CSS used is shown below:</p><code class="multiline language-css"></code>
+					</div>
+					<p>The following CSS library files are loaded for use in this example to provide the styling of the table:</p>
+					<ul>
+						<li>
+							<a href="../../../../media/css/jquery.dataTables.css">../../../../media/css/jquery.dataTables.css</a>
+						</li>
+						<li>
+							<a href="../../../Buttons/css/buttons.dataTables.css">../../../Buttons/css/buttons.dataTables.css</a>
+						</li>
+						<li>
+							<a href="../../css/stateRestore.dataTables.css">../../css/stateRestore.dataTables.css</a>
+						</li>
+						<li>
+							<a href="../../../Scroller/css/scroller.dataTables.css">../../../Scroller/css/scroller.dataTables.css</a>
+						</li>
+					</ul>
+				</div>
+				<div class="ajax">
+					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data will update automatically as any additional data is
+					loaded.</p>
+				</div>
+				<div class="php">
+					<p>The script used to perform the server-side processing for this table is shown below. Please note that this is just an example script using PHP. Server-side
+					processing scripts can be written in any language, using <a href="//datatables.net/manual/server-side">the protocol described in the DataTables
+					documentation</a>.</p>
+				</div>
+			</div>
+		</section>
+	</div>
+	<section>
+		<div class="footer">
+			<div class="gradient"></div>
+			<div class="liner">
+				<h2>Other examples</h2>
+				<div class="toc">
+					<div class="toc-group">
+						<h3><a href="./index.html">Initialisation and options</a></h3>
+						<ul class="toc active">
+							<li>
+								<a href="./simple.html">Basic StateRestore Example</a>
+							</li>
+							<li>
+								<a href="./alternative.html">Alternative UI</a>
+							</li>
+							<li>
+								<a href="./api.html">Basic StateRestore Example - API</a>
+							</li>
+							<li>
+								<a href="./customSplit.html">Custom Split Buttons</a>
+							</li>
+							<li>
+								<a href="./removeAll.html">Remove All Button</a>
+							</li>
+							<li>
+								<a href="./ajax.html">Ajax Loading and Saving</a>
+							</li>
+							<li>
+								<a href="./ajaxFunction.html">Ajax Function</a>
+							</li>
+							<li>
+								<a href="./predefined.html">Predefined States</a>
+							</li>
+							<li class="active">
+								<a href="./predefinedAjax.html">Predefined States from Ajax</a>
+							</li>
+							<li>
+								<a href="./predefinedAjaxNoSave.html">Predefined States - No Save, Remove, Rename or Create</a>
+							</li>
+							<li>
+								<a href="./noCreation.html">No state creation</a>
+							</li>
+							<li>
+								<a href="./noRemoval.html">No state remove</a>
+							</li>
+							<li>
+								<a href="./noRenaming.html">No state renaming</a>
+							</li>
+							<li>
+								<a href="./noSaving.html">No state saving</a>
+							</li>
+							<li>
+								<a href="./noButtons.html">No Buttons</a>
+							</li>
+						</ul>
+					</div>
+					<div class="toc-group">
+						<h3><a href="../customisation/index.html">Customisation</a></h3>
+						<ul class="toc">
+							<li>
+								<a href="../customisation/activeLabel.html">Label to Display Active States</a>
+							</li>
+							<li>
+								<a href="../customisation/creationModal.html">Creation Modal</a>
+							</li>
+							<li>
+								<a href="../customisation/customStateData.html">Custom State Data</a>
+							</li>
+							<li>
+								<a href="../customisation/columns.html">Creation Modal with Toggle for Columns</a>
+							</li>
+							<li>
+								<a href="../customisation/creationModalToggle.html">Creation Modal with Toggle</a>
+							</li>
+							<li>
+								<a href="../customisation/i18n.html">StateRestore Language Options</a>
+							</li>
+							<li>
+								<a href="../customisation/stateCount.html">Custom Button Text</a>
+							</li>
+							<li>
+								<a href="../customisation/noColumnSearch.html">Don't save column searches</a>
+							</li>
+							<li>
+								<a href="../customisation/noColumnVisibility.html">Don't save column visibility</a>
+							</li>
+							<li>
+								<a href="../customisation/childRows.html">Child Rows</a>
+							</li>
+							<li>
+								<a href="../customisation/noOrder.html">Don't save ordering</a>
+							</li>
+							<li>
+								<a href="../customisation/noLength.html">Don't save page length</a>
+							</li>
+							<li>
+								<a href="../customisation/noPaging.html">Don't save paging</a>
+							</li>
+							<li>
+								<a href="../customisation/noScroller.html">Don't save scroller</a>
+							</li>
+							<li>
+								<a href="../customisation/noSearch.html">Don't save search</a>
+							</li>
+							<li>
+								<a href="../customisation/noSearchBuilder.html">Don't save SearchBuilder</a>
+							</li>
+							<li>
+								<a href="../customisation/noSearchPanes.html">Don't save SearchPanes</a>
+							</li>
+							<li>
+								<a href="../customisation/noSelect.html">Don't save Selections</a>
+							</li>
+						</ul>
+					</div>
+					<div class="toc-group">
+						<h3><a href="../integration/index.html">Integration with other DataTables extensions</a></h3>
+						<ul class="toc">
+							<li>
+								<a href="../integration/preDefinedSearchPanes.html">Predefined SearchPanes State</a>
+							</li>
+							<li>
+								<a href="../integration/scroller.html">Scroller Integration</a>
+							</li>
+							<li>
+								<a href="../integration/searchBuilder.html">SearchBuilder Integration</a>
+							</li>
+							<li>
+								<a href="../integration/searchPanes.html">SearchPanes Integration</a>
+							</li>
+							<li>
+								<a href="../integration/select.html">Select Integration</a>
+							</li>
+						</ul>
+					</div>
+					<div class="toc-group">
+						<h3><a href="../styling/index.html">Styling</a></h3>
+						<ul class="toc">
+							<li>
+								<a href="../styling/bootstrap3.html">Bootstrap 3</a>
+							</li>
+							<li>
+								<a href="../styling/bootstrap4.html">Bootstrap 4</a>
+							</li>
+							<li>
+								<a href="../styling/bootstrap5.html">Bootstrap 5</a>
+							</li>
+							<li>
+								<a href="../styling/bulma.html">Bulma</a>
+							</li>
+							<li>
+								<a href="../styling/foundation.html">Foundation</a>
+							</li>
+							<li>
+								<a href="../styling/jqueryui.html">JQuery UI</a>
+							</li>
+							<li>
+								<a href="../styling/semanticui.html">Fomantic-UI (formally Semantic-UI) styling</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="epilogue">
+					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extensions">extensions</a> and <a href=
+					"http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of DataTables.</p>
+					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> © 2007-2022<br>
+					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

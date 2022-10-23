@@ -1,0 +1,9 @@
+@import 'https://fonts.googleapis.com/css?family=Karnit|Prompt';
+
+body{
+    font-family: 'Karnit', sans-serif;
+}
+
+h1,h2,h3{
+    font-family: 'Prompt', sans-serif;
+}
