@@ -13,7 +13,7 @@ class Tbluser extends Migration
                 'type' => 'SMALLINT',
                 'auto_increment' => true
             ],
-            'nik_user' => [
+            'username' => [
                 'type' => 'VARCHAR',
                 'constraint' => '20'
             ],

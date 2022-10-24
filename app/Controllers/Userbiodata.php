@@ -57,8 +57,8 @@ class Userbiodata extends BaseController
 				$value->nik_user,
 				$value->nm_user,
 				$value->email_user,
-				$value->gender == '1' ? 'Laki-laki' : 'Perempuan',
-				$value->tempat_lahir . ', ' . tgl_indo($value->tanggal_lahir),
+				// $value->gender == '1' ? 'Laki-laki' : 'Perempuan',
+				// $value->tempat_lahir . ', ' . tgl_indo($value->tanggal_lahir),
 				$value->telpon,
 				$value->alamat,
 
@@ -121,18 +121,12 @@ class Userbiodata extends BaseController
 		);
 
 		$user = array(
-			'nik_user' => $fields['nik_user'],
+			'username' => $fields['nik_user'],
 			'status' => 10,
 			'password' => md5($fields['pass']),
 			'role' => $fields['role'],
 			'created_at' => $create
 		);
-
-		// $userb = var_dump($userbiodata);
-		// $user =var_dump($user);
-
-		// return $userb.'\n'.$user;die;
-
 
 		$this->validation->setRules([
 			'nik_user' => ['label' => 'Nik user', 'rules' => 'required|min_length[0]|max_length[20]|nikExist[nik_user]', 'errors' => [
@@ -177,10 +171,10 @@ class Userbiodata extends BaseController
 				]
 			],
 			'pass' => [
-				'rules' => 'required|min_length[8]',
+				'rules' => 'required|min_length[4]',
 				'errors' => [
 					'required' => 'Password tidak boleh kosong',
-					'min_length' => 'Password kurang dari 8 karakter'
+					'min_length' => 'Password harus lebih dari 4 karakter'
 				]
 			],
 			'confpass' => [
@@ -240,8 +234,8 @@ class Userbiodata extends BaseController
 	{
 		$create = date('Y-m-d H:i:s');
 		$update = array();
-		$fields['id_user_bio'] = $this->request->getPost('id_user_bio');
 		$fields['nik_user'] = $this->request->getPost('nik_user');
+		$fields['id_user_bio'] = $this->request->getPost('id_user_bio');
 		$fields['nm_user'] = $this->request->getPost('nm_user');
 		$fields['email_user'] = $this->request->getPost('email_user');
 		$fields['gender'] = $this->request->getPost('gender');
@@ -251,7 +245,7 @@ class Userbiodata extends BaseController
 		$fields['alamat'] = $this->request->getPost('alamat');
 		$fields['imguser'] = $this->request->getFile('imguser');
 		$fields['updated_at'] = $create;
-
+		
 		$userbiodata = array(
 			'nik_user' => $fields['nik_user'],
 			'nm_user' => $fields['nm_user'],
@@ -365,6 +359,8 @@ class Userbiodata extends BaseController
 				}
 			}
 			if ($this->userbiodataModel->where('id_user_bio', $id)->delete()) {
+
+				$this->userModel->where('username',$data->nik_user)->delete();
 
 				$response['success'] = true;
 				$response['messages'] = "Data berhasil dihapus";

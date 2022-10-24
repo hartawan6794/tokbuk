@@ -20,13 +20,12 @@
       <thead>
         <tr>
           <th>No</th>
-          <th>Nik user</th>
-          <th>Nm user</th>
+          <th>NIK user</th>
+          <th>Nama user</th>
           <th>Email user</th>
-          <th>Gender</th>
-          <th>Tempat, Tanggal lahir</th>
+          <!-- <th>Tempat, Tanggal lahir</th> -->
           <th>Telpon</th>
-          <th>Alamat</th>
+          <th style="width :10%">Alamat</th>
           <th></th>
         </tr>
       </thead>
@@ -253,6 +252,7 @@
           $('#data-modal').modal('show');
           //insert data to form
           $("#data-form #id_user_bio").val(response.id_user_bio);
+          $("#data-form #nik_user").prop('readonly',true);
           $("#data-form #nik_user").val(response.nik_user);
           $("#data-form #nm_user").val(response.nm_user);
           $("#data-form #email_user").val(response.email_user);
@@ -363,8 +363,6 @@
 
     });
   }
-
-
 
   function remove(id_user_bio) {
     Swal.fire({

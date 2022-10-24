@@ -15,7 +15,7 @@
       <!-- Sidebar Menu -->
       <ul class="nav nav-pills nav-sidebar flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
         <li class="nav-item">
-          <a href="<?= base_url()?>" class="nav-link active">
+          <a href="<?= base_url()?>" class="nav-link <?= $seg ? '':'active'?> ">
             <i class="nav-icon fas fa-circle"></i>
             <p>
               Dashboard
@@ -40,7 +40,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link ">
+              <a href="<?= base_url('user')?>" class="nav-link <?= $seg == 'user' ? 'active':''?>">
                 <i class="nav-icon far fa-circle"></i>
                 <p>User</p>
               </a>

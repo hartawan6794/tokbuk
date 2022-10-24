@@ -43,6 +43,7 @@ $RECYCLE.BIN/
 # as it poses a security risk.
 .env
 .vagrant
+.READMEe.md
 Vagrantfile
 
 #-------------------------

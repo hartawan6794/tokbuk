@@ -44,11 +44,11 @@ $routes->get('/', 'Home::index');
 //     $routes->get('(:any)', 'Userbio::form');
 //     $routes->post('prosses', 'Userbio::prosses');
 // });
-$routes->group('user',function ($routes){
-    $routes->get('/', 'user::index');
-    $routes->get('(:any)', 'user::form');
-    $routes->post('prosses', 'user::prosses');
-});
+// $routes->group('user',function ($routes){
+//     $routes->get('/', 'user::index');
+//     $routes->get('(:any)', 'user::form');
+//     $routes->post('prosses', 'user::prosses');
+// });
 
 /*
  * --------------------------------------------------------------------
