@@ -21,12 +21,15 @@ class Login extends BaseController
         //     'controller'    	=> 'Dashboard',
         //     'title'     		=> 'Dashboard'				
         // ];
-        return view('login');
+        if($this->session->get('isLogin')){
+            return redirect()->to('home');
+        }else{
+            return view('login');
+        }
     }
 
     public function prosses()
     {
-
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
 
@@ -63,8 +66,15 @@ class Login extends BaseController
                 <?php
             } else {
                 $userbio = $this->userbio->where('nik_user', $username)->first();
-
                 if ($this->checkPassword($password)) {
+                    $session = [
+                        'isLogin' => true,
+                        'id_user_bio' => $userbio->id_user_bio,
+                        'username' => $username,
+                        'gambar' => $userbio->imguser,
+                        'role' => $user->role,
+                    ];
+                    $this->session->set($session);
                 ?>
                     <script>
                         Swal.fire({
@@ -94,8 +104,7 @@ class Login extends BaseController
                 <?php
                 }
             }
-
-            // return redirect->to()->('');
+           // return redirect->to()->('');
         }
     }
 
@@ -106,5 +115,10 @@ class Login extends BaseController
             return true;
         else
             return false;
+    }
+
+    function logout(){
+        $this->session->destroy();
+        return redirect()->to('login');
     }
 }

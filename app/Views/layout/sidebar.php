@@ -16,17 +16,15 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
         <li class="nav-item">
           <a href="<?= base_url()?>" class="nav-link <?= $seg ? '':'active'?> ">
-            <i class="nav-icon fas fa-circle"></i>
+            <i class="nav-icon fa fa-desktop"></i>
             <p>
               Dashboard
-              <!-- <i class="end fas fa-angle-left"></i> -->
             </p>
           </a>
-
         </li>
         <li class="nav-item <?= $seg == 'userbiodata' || $seg == 'user' ? 'menu-open menu-is-open':''?>">
-          <a href="javascript:;" class="nav-link ">
-            <i class="nav-icon fas fa-circle"></i>
+          <a href="#" class="nav-link ">
+            <i class="nav-icon fa fa-user"></i>
             <p>
               Users
               <i class="end fas fa-angle-left"></i>
@@ -46,6 +44,12 @@
               </a>
             </li>
           </ul>
+        </li>
+        <li class="nav-item">
+          <a href="<?= base_url('toko')?>" class="nav-link <?= $seg == 'toko' ? 'active':''?>">
+            <i class="nav-icon fa fa-store"></i>
+            <p class="text">Toko</p>
+          </a>
         </li>
 
         <li class="nav-item ">

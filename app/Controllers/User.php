@@ -22,19 +22,24 @@ class User extends BaseController
 	public function index()
 	{
 
-		$data = [
-			'controller'    	=> 'user',
-			'title'     		=> 'User'
-		];
+		if (session()->get('isLogin')) {
 
-		return view('user', $data);
+			$data = [
+				'controller'    	=> 'user',
+				'title'     		=> 'User'
+			];
+
+			return view('user', $data);
+		} else {
+			return view('login');
+		}
 	}
 
 	public function getAll()
 	{
 		$response = $data['data'] = array();
 
-		$result = $this->userModel->select()->where('status','10')->findAll();
+		$result = $this->userModel->select()->where('status', '10')->findAll();
 
 		$i = 1;
 		foreach ($result as $key => $value) {
@@ -50,17 +55,16 @@ class User extends BaseController
 			$ops .= '</div></div>';
 
 			// if($value->status != '9'){
-				$data['data'][$key] = array(
-					$i,
-					$value->username,
-					$value->password,
-					$value->role == '0' ? 'Admin' : ($value->role == '1' ? 'Penjual':'Pembeli'),
-					$ops
-				);
+			$data['data'][$key] = array(
+				$i,
+				$value->username,
+				$value->password,
+				$value->role == '0' ? 'Admin' : ($value->role == '1' ? 'Penjual' : 'Pembeli'),
+				$ops
+			);
 			// }
 
 			$i++;
-
 		}
 
 		return $this->response->setJSON($data);
@@ -162,7 +166,7 @@ class User extends BaseController
 			$response['messages'] = $this->validation->getErrors(); //Show Error in Input Form
 
 		} else {
-			
+
 			if ($this->userModel->update($fields['id_user'], $user)) {
 				$response['success'] = true;
 				$response['messages'] = "Berhasil Mengubah Data";
@@ -186,7 +190,7 @@ class User extends BaseController
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
 		} else {
 
-			if ($this->userModel->update($id,['status' => '9'])) {
+			if ($this->userModel->update($id, ['status' => '9'])) {
 
 				$response['success'] = true;
 				$response['messages'] = "Berhasil di Hapus";

@@ -19,18 +19,22 @@ class Userbiodata extends BaseController
 		$this->userbiodataModel = new UserbiodataModel();
 		$this->userModel = new UserModel();
 		$this->validation =  \Config\Services::validation();
+        // $this->session = \Config\Services::session();
 		helper('settings');
 	}
 
 	public function index()
 	{
-
-		$data = [
-			'controller'    	=> 'userbiodata',
-			'title'     		=> 'Userbiodata'
-		];
-
-		return view('userbiodata', $data);
+		if(session()->get('isLogin')){
+			$data = [
+				'controller'    	=> 'userbiodata',
+				'title'     		=> 'Userbiodata'
+			];
+			return view('userbiodata', $data);
+        }else{
+            return view('login');
+        }
+		
 	}
 
 	public function getAll()
@@ -319,9 +323,9 @@ class Userbiodata extends BaseController
 			if ($fields['imguser']->getName() != '') {
 				$data = $this->userbiodataModel->where('id_user_bio', $fields['id_user_bio'])->first();
 				if ($data->imguser) {
-					// if (file_exists('img/user/' . $data->imguser)) {
+					if (file_exists('img/user/' . $data->imguser)) {
 					unlink('img/user/' . $data->imguser);
-					// }
+					}
 				}
 				$fileName = 'profile-' . $fields['nik_user'] . '.' . $fields['imguser']->guessExtension();
 				$userbiodata['imguser'] = $fileName;
