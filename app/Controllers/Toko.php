@@ -4,9 +4,9 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-
 use App\Models\TokoModel;
 use App\Models\UserbiodataModel;
+use App\Models\UserModel;
 
 class Toko extends BaseController
 {
@@ -19,6 +19,7 @@ class Toko extends BaseController
 		$this->tokoModel = new TokoModel();
 		$this->validation =  \Config\Services::validation();
 		$this->userbio = new UserbiodataModel();
+		$this->user = new UserModel();
 	}
 
 	public function index()
@@ -27,9 +28,10 @@ class Toko extends BaseController
 		if (session()->get('isLogin')) {
 
 			if (session()->get('username') == 'admin') {
-				$userbio = $this->userbio->select('*')->get();
+				$userbio = $this->user->select('*')->join('tbl_user_biodata', 'tbl_user.username = tbl_user_biodata.nik_user')->where('tbl_user.role', '1')->get();
 			} else {
-				$userbio = $this->userbio->select('*')->where('nik_user', session()->get('username'))->get();
+				$userbio = $this->user->select('*')->join('tbl_user_biodata', 'tbl_user.username = tbl_user_biodata.nik_user')->where(['tbl_user.role' => '1',
+				'tbl_user.username' => session()->get('username')])->get();
 			}
 			$data = [
 				'controller'    	=> 'toko',
@@ -47,10 +49,10 @@ class Toko extends BaseController
 	{
 		$response = $data['data'] = array();
 
-		if(session()->get('username') =='admin'){
+		if (session()->get('username') == 'admin') {
 			$result = $this->tokoModel->select()->findAll();
-		}else{
-			$result = $this->tokoModel->select()->where('id_user_bio',session()->get('id_user_bio'))->findAll();
+		} else {
+			$result = $this->tokoModel->select()->where('id_user_bio', session()->get('id_user_bio'))->findAll();
 		}
 		$i = 1;
 
@@ -147,7 +149,6 @@ class Toko extends BaseController
 		$fields['alamat_toko'] = $this->request->getPost('alamat_toko');
 		$fields['telpon'] = $this->request->getPost('telpon');
 		$fields['updated_at'] = $update;
-
 
 		$this->validation->setRules([
 			'id_user_bio' => ['label' => 'Id user bio', 'rules' => 'required|numeric|min_length[0]|max_length[6]'],

@@ -6,11 +6,11 @@
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <div class="col-9 mt-2">
-        <h3 class="card-title">Toko</h3>
+      <div class="col-10 mt-2">
+        <h3 class="card-title">Kategori</h3>
       </div>
-      <div class="col-3">
-        <button type="button" class="btn float-sm-end btn-success" onclick="save()" title="Tambah Data Toko"> <i class="fa fa-plus"></i> Tambah Data Toko</button>
+      <div class="col-2">
+        <button type="button" class="btn float-right btn-success" onclick="save()" title="Tambah kategori"> <i class="fa fa-plus"></i> Tambah Kategori</button>
       </div>
     </div>
   </div>
@@ -19,12 +19,10 @@
     <table id="data_table" class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th>No</th>
-          <th>Nama Penjual</th>
-          <th>Nama toko</th>
-          <th>Alamat toko</th>
-          <th>Telpon</th>
-          <th>Aksi</th>
+          <th>Id kategori</th>
+          <th>Nama kategori</th>
+
+          <th></th>
         </tr>
       </thead>
     </table>
@@ -45,50 +43,21 @@
       <div class="modal-body">
         <form id="data-form" class="pl-3 pr-3">
           <div class="row">
-            <input type="hidden" id="id_toko" name="id_toko" class="form-control" placeholder="Id toko" maxlength="6" required>
+            <input type="hidden" id="id_kategori" name="id_kategori" class="form-control" placeholder="Id kategori" maxlength="4" required>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="nm_user" class="col-form-label"> Nama Pengguna: </label>
-                <select class="form-control" name="nm_user" id="nm_user">
-                  <?php session()->get('username') != 'admin' ? '' : '<option value="">-- Pilih Pengguna -- </option>' ?>
-                  <?php foreach ($userbio as $data) : ?>
-                    <option value="<?= $data->id_user_bio ?>"><?= $data->nm_user ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-            </div>
-            <!-- <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label for="id_user_bio" class="col-form-label"> Id user bio: <span class="text-danger">*</span> </label>
-                <input type="number" id="id_user_bio" name="id_user_bio" class="form-control" placeholder="Id user bio" minlength="0" maxlength="6" required>
-              </div>
-            </div> -->
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label for="nm_toko" class="col-form-label"> Nama toko: <span class="text-danger">*</span> </label>
-                <input type="text" id="nm_toko" name="nm_toko" class="form-control" placeholder="Nama toko" minlength="0" maxlength="20" required>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label for="alamat_toko" class="col-form-label"> Alamat toko: <span class="text-danger">*</span> </label>
-                <input type="text" id="alamat_toko" name="alamat_toko" class="form-control" placeholder="Alamat toko" minlength="0" maxlength="255" required>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label for="telpon" class="col-form-label"> Telpon: </label>
-                <input type="text" id="telpon" name="telpon" class="form-control" placeholder="Telpon" minlength="0" maxlength="15">
+                <label for="nama_kategori" class="col-form-label"> Nama kategori: <span class="text-danger">*</span> </label>
+                <input type="text" id="nama_kategori" name="nama_kategori" class="form-control" placeholder="Nama kategori" minlength="0" maxlength="255" required>
               </div>
             </div>
           </div>
 
           <div class="form-group text-center">
             <div class="btn-group">
-              <button type="submit" class="btn btn-success mr-2" id="form-btn">Tambah</button>
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-success mr-2" id="form-btn"><?= lang("App.save") ?></button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><?= lang("App.cancel") ?></button>
             </div>
           </div>
         </form>
@@ -140,15 +109,15 @@
     return submitText;
   }
 
-  function save(id_toko) {
+  function save(id_kategori) {
     // reset the form 
     $("#data-form")[0].reset();
     $(".form-control").removeClass('is-invalid').removeClass('is-valid');
-    if (typeof id_toko === 'undefined' || id_toko < 1) { //add
+    if (typeof id_kategori === 'undefined' || id_kategori < 1) { //add
       urlController = '<?= base_url($controller . "/add") ?>';
       submitText = 'Tambah';
       $('#model-header').removeClass('bg-info').addClass('bg-success');
-      $("#info-header-modalLabel").text('Tambah Data');
+      $("#info-header-modalLabel").text('Tambah Kategori');
       $("#form-btn").text(submitText);
       $('#data-modal').modal('show');
     } else { //edit
@@ -158,21 +127,17 @@
         url: '<?php echo base_url($controller . "/getOne") ?>',
         type: 'post',
         data: {
-          id_toko: id_toko
+          id_kategori: id_kategori
         },
         dataType: 'json',
         success: function(response) {
           $('#model-header').removeClass('bg-success').addClass('bg-info');
-          $("#info-header-modalLabel").text('Ubah Data Toko');
+          $("#info-header-modalLabel").text('Ubah Kategori');
           $("#form-btn").text(submitText);
           $('#data-modal').modal('show');
           //insert data to form
-          $("#data-form #id_toko").val(response.id_toko);
-          $("#data-form #nm_user").val(response.id_user_bio);
-          $("#data-form #nm_toko").val(response.nm_toko);
-          $("#data-form #nm_user").prop('readonly', true);
-          $("#data-form #alamat_toko").val(response.alamat_toko);
-          $("#data-form #telpon").val(response.telpon);
+          $("#data-form #id_kategori").val(response.id_kategori);
+          $("#data-form #nama_kategori").val(response.nama_kategori);
 
         }
       });
@@ -265,10 +230,10 @@
 
 
 
-  function remove(id_toko) {
+  function remove(id_kategori) {
     Swal.fire({
-      title: "Hapus Data Toko",
-      text: "Yakin ingin menghapus?",
+      title: "Hapus Kategori",
+      text: "Yakin ingin menghapus",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -282,7 +247,7 @@
           url: '<?php echo base_url($controller . "/remove") ?>',
           type: 'post',
           data: {
-            id_toko: id_toko
+            id_kategori: id_kategori
           },
           dataType: 'json',
           success: function(response) {

@@ -6,11 +6,11 @@
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <div class="col-9 mt-2">
-        <h3 class="card-title">Userbiodata</h3>
+      <div class="col-10 mt-2">
+        <h3 class="card-title">Product</h3>
       </div>
-      <div class="col-3">
-        <button type="button" class="btn float-sm-end btn-success" onclick="save()" title="Tambah Pengguna"> <i class="fa fa-plus"></i> Tambah Pengguna</button>
+      <div class="col-2">
+        <button type="button" class="btn float-right btn-success" onclick="save()" title="Tambah Produk"> <i class="fa fa-plus"></i> Tambah Produk</button>
       </div>
     </div>
   </div>
@@ -19,14 +19,14 @@
     <table id="data_table" class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th>No</th>
-          <th>NIK user</th>
-          <th>Nama user</th>
-          <th>Email user</th>
-          <!-- <th>Tempat, Tanggal lahir</th> -->
-          <th>Telpon</th>
-          <th style="width :10%">Alamat</th>
-          <th></th>
+          <th>Nomor</th>
+          <th>Judul buku</th>
+          <th>Nama penerbit</th>
+          <th>Nama penulis</th>
+          <th>Tahun</th>
+          <th>Harga buku</th>
+
+          <th>Aksi</th>
         </tr>
       </thead>
     </table>
@@ -47,102 +47,120 @@
       <div class="modal-body">
         <form id="data-form" class="pl-3 pr-3" method="post" enctype="multipart/form-data">
           <div class="row">
-            <input type="hidden" id="id_user_bio" name="id_user_bio" class="form-control" placeholder="Id user bio" maxlength="6" required>
+            <input type="hidden" id="id_product" name="id_product" class="form-control" placeholder="Id product" maxlength="6" required>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="nik_user" class="col-form-label">Masukan NIK : <span class="text-danger">*</span> </label>
-                <input type="text" id="nik_user" name="nik_user" class="form-control" placeholder="Nik user">
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label for="nm_user" class="col-form-label">Masaukan Nama: <span class="text-danger">*</span> </label>
-                <input type="text" id="nm_user" name="nm_user" class="form-control" placeholder="Nm user">
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label for="email_user" class="col-form-label">Masukan Email: <span class="text-danger">*</span> </label>
-                <input type="texts" id="email_user" name="email_user" class="form-control" placeholder="Email user">
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label for="nm_user" class="col-form-label"> Jenis Kelamin: </label>
-                <select class="form-control" name="gender" id="gender">
-                  <option value="">-- Pilih Jenis Kelamin -- </option>
-                  <option value="1">Laki-laki</option>
-                  <option value="2">perempuan</option>
+                <label for="id_toko" class="col-form-label"> Nama Toko: </label>
+                <select class="form-control" name="id_toko" id="id_toko">
+                  <?php session()->get('username') == 'admin' ? '<option value="">-- Pilih Toko -- </option>' : '' ?>
+                  <?php foreach ($toko as $data) : ?>
+                    <option value="<?= $data->id_toko ?>"><?= $data->nm_toko ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="tanggal_lahir" class="col-form-label">Masukan Tanggal lahir: </label>
-                <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="form-control" dateISO="true">
+                <label for="judul_buku" class="col-form-label"> Judul buku: <span class="text-danger">*</span> </label>
+                <input type="text" id="judul_buku" name="judul_buku" class="form-control" placeholder="Judul buku" minlength="0" maxlength="255">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="tempat_lahir" class="col-form-label">Masukan Tempat lahir: </label>
-                <input type="text" id="tempat_lahir" name="tempat_lahir" class="form-control" placeholder="Tempat lahir" minlength="0" maxlength="150">
+                <label for="nm_penerbit" class="col-form-label"> Nama penerbit: <span class="text-danger">*</span> </label>
+                <input type="text" id="nm_penerbit" name="nm_penerbit" class="form-control" placeholder="Nama penerbit" minlength="0" maxlength="255">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="telpon" class="col-form-label">Masukan Nomor Telpon: </label>
-                <input type="text" id="telpon" name="telpon" class="form-control" placeholder="Telpon" minlength="0" maxlength="15">
+                <label for="nm_penulis" class="col-form-label"> Nama penulis: </label>
+                <input type="text" id="nm_penulis" name="nm_penulis" class="form-control" placeholder="Nama penulis" minlength="0" maxlength="255">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="alamat" class="col-form-label">Masukan Alamat: </label>
-                <input type="text" id="alamat" name="alamat" class="form-control" placeholder="Alamat" minlength="0" maxlength="255">
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group viewImage">
+                <label for="tahun_terbit" class="col-form-label"> Tahun: </label>
+                <input type="text" id="tahun_terbit" name="tahun_terbit" class="form-control" placeholder="Tahun" minlength="0" maxlength="4">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="imguser" class="col-form-label">Unggah Foto : <span class="text-danger" style="font-size: 10px">*Kosongkan tidak apa</span> </label>
-                <input type="file" id="imguser" name="imguser" class="form-control" placeholder="Imguser">
+                <label for="jml_halaman" class="col-form-label"> Jumlah halaman: </label>
+                <input type="number" id="jml_halaman" name="jml_halaman" class="form-control" placeholder="Juml halaman" minlength="0" maxlength="6">
               </div>
             </div>
-            <div class="col-md-12" id="passForm">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group mb-3">
-                    <label for="pass" class="col-form-label"> Password: </label>
-                    <input type="password" id="pass" name="pass" class="form-control" placeholder="Masukan password">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group mb-3">
-                    <label for="confpass" class="col-form-label"> Konfirmasi Password: </label>
-                    <input type="password" id="confpass" name="confpass" class="form-control" placeholder="Konfirmasi Password">
-                  </div>
-                </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="deskripsi_buku" class="col-form-label"> Deskripsi buku: </label>
+                <input type="text" id="deskripsi_buku" name="deskripsi_buku" class="form-control" placeholder="Deskripsi buku" minlength="0" maxlength="255">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="id_kategori" class="col-form-label"> Kategori Buku: </label>
+                <select class="form-control" name="id_kategori" id="id_kategori">
+                  <option value="">-- Pilih Kategori Buku -- </option>
+                  <?php foreach($kategori as $data) : ?>
+                  <option value="<?= $data->id_kategori?>"><?= $data->nama_kategori?></option>
+                  <?php endforeach;?>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="stok" class="col-form-label"> Stok: </label>
+                <input type="number" id="stok" name="stok" class="form-control" placeholder="Stok" minlength="0" maxlength="6">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="harga_buku" class="col-form-label"> Harga buku: </label>
+                <input type="text" id="harga_buku" name="harga_buku" class="form-control" placeholder="Harga buku" minlength="0" maxlength="10">
               </div>
             </div>
           </div>
-          <div class="col-md-12" id="roleForm">
-            <div class="form-group mb-3">
-              <label for="role" class="col-form-label"> Daftar Sebagai: </label>
-              <select class="form-control" name="role" id="role">
-                <option value="">-- Pilih Jenis Akun -- </option>
-                <option value="1">Penjual</option>
-                <option value="2">Pembeli</option>
-              </select>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group viewImage1">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="imgproduct1" class="col-form-label textimg"> Upload Produk 1: </label>
+                <input type="file" id="imgproduct1" name="imgproduct1" class="form-control" placeholder="Imgproduct1" minlength="0" maxlength="255">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group viewImage2">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="imgproduct2" class="col-form-label textimg"> Upload Produk 2: </label>
+                <input type="file" id="imgproduct2" name="imgproduct2" class="form-control" placeholder="Imgproduct2" minlength="0" maxlength="255">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group viewImage3">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="imgproduct3" class="col-form-label textimg"> Upload Produk 3: </label>
+                <input type="file" id="imgproduct3" name="imgproduct3" class="form-control" placeholder="Imgproduct3" minlength="0" maxlength="255">
+              </div>
             </div>
           </div>
 
           <div class="form-group text-center">
             <div class="btn-group">
-              <button type="submit" class="btn btn-success mr-2" id="form-btn">Tambah Data</button>
+              <button type="submit" class="btn btn-success mr-2" id="form-btn">Tambah</button>
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
             </div>
           </div>
@@ -177,6 +195,8 @@
     </div>
   </div>
 </div>
+
+
 
 
 <?= $this->endSection() ?>
@@ -219,57 +239,65 @@
     return submitText;
   }
 
-  function save(id_user_bio) {
+  function save(id_product) {
     // reset the form 
     $("#data-form")[0].reset();
-    $('#passForm').show()
-    $('#roleForm').show()
+      $("#data-form .viewImage1").html('')
+      $("#data-form .viewImage2").html('')
+      $("#data-form .viewImage3").html('')
     $(".form-control").removeClass('is-invalid').removeClass('is-valid');
-    if (typeof id_user_bio === 'undefined' || id_user_bio < 1) { //add
+    if (typeof id_product === 'undefined' || id_product < 1) { //add
       urlController = '<?= base_url($controller . "/add") ?>';
-      submitText = 'Tambah Data';
+      submitText = 'Tambah';
       $('#model-header').removeClass('bg-info').addClass('bg-success');
-      $("#info-header-modalLabel").text("Tambah Data Pengguna");
-      $("#form-btn").text("Tambah Data");
+      $("#info-header-modalLabel").text('Tambah Produk');
+      $("#form-btn").text(submitText);
+      $('.textimg').text("Upload Gambar :")
       $('#data-modal').modal('show');
     } else { //edit
       urlController = '<?= base_url($controller . "/edit") ?>';
-      submitText = 'Ubah Data';
-      $('#passForm').hide()
-      $('#roleForm').hide()
-      $("#data-form .viewImage").html('')
+      submitText = 'Ubah';
       $.ajax({
         url: '<?php echo base_url($controller . "/getOne") ?>',
         type: 'post',
         data: {
-          id_user_bio: id_user_bio
+          id_product: id_product
         },
         dataType: 'json',
         success: function(response) {
           $('#model-header').removeClass('bg-success').addClass('bg-info');
-          $("#info-header-modalLabel").text('Ubah Data Pengguna');
-          $("#form-btn").text("Ubah Data");
+          $("#info-header-modalLabel").text('Ubah Produk');
+          $("#form-btn").text(submitText);
           $('#data-modal').modal('show');
           //insert data to form
-          $("#data-form #id_user_bio").val(response.id_user_bio);
-          $("#data-form #nik_user").prop('readonly',true);
-          $("#data-form #nik_user").val(response.nik_user);
-          $("#data-form #nm_user").val(response.nm_user);
-          $("#data-form #email_user").val(response.email_user);
-          $("#data-form #gender").val(response.gender);
-          $("#data-form #tanggal_lahir").val(response.tanggal_lahir);
-          $("#data-form #tempat_lahir").val(response.tempat_lahir);
-          $("#data-form #telpon").val(response.telpon);
-          $("#data-form #alamat").val(response.alamat);
-          $("#data-form .viewImage").append(
-          (response.imguser ?
-            `<img style="width: 50%;" src='/img/user/${response.imguser}'>` :
-            `<span class="text-danger">Belum Unggah Photo</span>`) );
+          $("#data-form #id_product").val(response.id_product);
+          $("#data-form #id_toko").val(response.id_toko);
+          $("#data-form #judul_buku").val(response.judul_buku);
+          $("#data-form #nm_penerbit").val(response.nm_penerbit);
+          $("#data-form #nm_penulis").val(response.nm_penulis);
+          $("#data-form #tahun_terbit").val(response.tahun_terbit);
+          $("#data-form #jml_halaman").val(response.jml_halaman);
+          $("#data-form #deskripsi_buku").val(response.deskripsi_buku);
+          $("#data-form #id_kategori").val(response.id_kategori);
+          $("#data-form #stok").val(response.stok);
+          $("#data-form #harga_buku").val(response.harga_buku);
+          $("#data-form .viewImage1").append(
+            (response.imgproduct1 ?
+              `<img style="width: 40%;" src='/img/product/${response.imgproduct1}'>` :
+              `<span class="text-danger">Belum Unggah Photo</span>`));
+          $("#data-form .viewImage2").append(
+            (response.imgproduct2 ?
+              `<img style="width: 40%;" src='/img/product/${response.imgproduct2}'>` :
+              `<span class="text-danger">Belum Unggah Photo</span>`));
+          $("#data-form .viewImage3").append(
+            (response.imgproduct3 ?
+              `<img style="width: 40%;" src='/img/product/${response.imgproduct3}'>` :
+              `<span class="text-danger">Belum Unggah Photo</span>`));
+          $('.textimg').text("Ubah Gambar :")
 
         }
       });
     }
-
     $.validator.setDefaults({
       highlight: function(element) {
         $(element).addClass('is-invalid').removeClass('is-valid');
@@ -295,25 +323,19 @@
       },
       submitHandler: function(form) {
         // var form = $('#data-form');
-        // var formData = new FormData(document.getElementById("data-form"))
-        // form.append('File', $('#imguser')[0].files[0])
-        // var imguser = new FormData($("#imguser")[0]);
-        // var fileUpload = $("#imguser").get(0).files;
-        // var files = fileUpload.name;
         $(".text-danger").remove();
         $.ajax({
           // fixBug get url from global function only
           // get global variable is bug!
           url: getUrl(),
           type: 'post',
-          data: new FormData(form), //form.serialize(), //formData,
+          data: new FormData(form),
           processData: false,
           contentType: false,
           cache: false,
           dataType: 'json',
           beforeSend: function() {
             $('#form-btn').html('<i class="fa fa-spinner fa-spin"></i>');
-            // console.log(form.serialize())
           },
           success: function(response) {
             if (response.success === true) {
@@ -364,10 +386,12 @@
     });
   }
 
-  function remove(id_user_bio) {
+
+
+  function remove(id_product) {
     Swal.fire({
-      title: "Hapus Data",
-      text: "Yakin Ingin Menghapus Data ?",
+      title: "Hapus Produk",
+      text: "Yakin ingin menghapus ?",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -381,7 +405,7 @@
           url: '<?php echo base_url($controller . "/remove") ?>',
           type: 'post',
           data: {
-            id_user_bio: id_user_bio
+            id_product: id_product
           },
           dataType: 'json',
           success: function(response) {
@@ -413,17 +437,17 @@
     })
   }
 
-
   $('.close').on('click', function() {
     $("#viewModal").modal("hide");
   })
 
-  function view(id_user_bio) {
+
+  function view(id_product) {
     $.ajax({
       url: '<?php echo base_url($controller . "/getOne") ?>',
       type: 'post',
       data: {
-        id_user_bio: id_user_bio
+        id_product: id_product
       },
       dataType: 'json',
       beforeSend: function(x) {
@@ -437,44 +461,57 @@
           `
               <table id="dataTable" class="table table-bordered table-striped">
                     <tr>
-                        <th>NIK</th>
-                        <td>${x.nik_user}</td>
+                        <th>Nama Toko</th>
+                        <td>${x.nm_toko}</td>
                     </tr>
                     <tr>
-                        <th>Nama Pengguna</th>
-                        <td>${x.nm_user}</td>
+                        <th>Judul Buku</th>
+                        <td>${x.judul_buku}</td>
                     </tr>
                     <tr>
-                        <th>Email Pengguna</th>
-                        <td>${x.email_user}</td>
+                        <th>Nama Penerbit</th>
+                        <td>${x.nm_penerbit}</td>
                     </tr>
                     <tr>
-                        <th>Jenis Kelamin</th>
-                        <td>` +
-          (x.gender == "1" ? "Laki-laki" : "Perempaun") +
-          `</td>
+                        <th>Nama Penulis</th>
+                        <td>${x.nm_penulis}</td>
                     </tr>
                     <tr>
-                        <th>Tempat, Tanggal Lahir</th>
-                        <td>${x.tempat_lahir}, ` + tgl_indo(x.tanggal_lahir) + `</td>
+                        <th>Tahun Terbit</th>
+                        <td>${x.tahun_terbit}</td>
                     </tr>
                     <tr>
-                        <th>Alamat</th>
-                        <td>${x.alamat}</td>
+                        <th>Kategori</th>
+                        <td>${x.nama_kategori}</td>
                     </tr>
                     <tr>
-                        <th>No. Telpon</th>
-                        <td>${x.telpon}</td>
+                        <th>Jumlah Halaman</th>
+                        <td>${x.jml_halaman} Hal.</td>
                     </tr>
                     <tr>
-                        <th>Gambar Pengguna</th>
-                        <td style="width:100%'">` +
-          (x.imguser ?
-            `<img style="width: 100%;" src='/img/user/${x.imguser}'>` :
-            "Belum Upload Photo") +
-          `</td>
+                        <th>Deskripsi Buku</th>
+                        <td>${x.deskripsi_buku}</td>
                     </tr>
-
+                    <tr>
+                        <th>Deskripsi Buku</th>
+                        <td>` + convertToRupiah(x.harga_buku) + `</td>
+                    </tr>
+                    <tr>
+                        <th>Stok Buku</th>
+                        <td>${x.stok}</td>
+                    </tr>
+                    <tr>
+                        <th>Gambar Buku</th>
+                        <td>` + (x.imgproduct1 ? `<img style="width: 30%;" src='/img/product/${x.imgproduct1}'>` : 'Belum Upload Gambar') + `</td>
+                    </tr>
+                    <tr>
+                        <th>Gambar Buku</th>
+                        <td>` + (x.imgproduct2 ? `<img style="width: 30%;" src='/img/product/${x.imgproduct2}'>` : 'Belum Upload Gambar') + `</td>
+                    </tr>
+                    <tr>
+                        <th>Gambar Buku</th>
+                        <td>` + (x.imgproduct2 ? `<img style="width: 30%;" src='/img/product/${x.imgproduct3}'>` : 'Belum Upload Gambar') + `</td>
+                    </tr>
                 </table>
               `
         );
@@ -485,32 +522,39 @@
     });
 
     $("#viewModal").modal("show");
-
   }
-  
+
   function tgl_indo(string) {
-      bulanIndo = [
-        "",
-        "Januari",
-        "Februari",
-        "Maret",
-        "April",
-        "Mei",
-        "Juni",
-        "Juli",
-        "Agustus",
-        "September",
-        "Oktober",
-        "November",
-        "Desember",
-      ];
+    bulanIndo = [
+      "",
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
 
-      tanggal = string.split("-")[2];
-      bulan = string.split("-")[1];
-      tahun = string.split("-")[0];
+    tanggal = string.split("-")[2];
+    bulan = string.split("-")[1];
+    tahun = string.split("-")[0];
 
-      return tanggal + " " + bulanIndo[Math.abs(bulan)] + " " + tahun;
-    }
+    return tanggal + " " + bulanIndo[Math.abs(bulan)] + " " + tahun;
+  }
+
+  function convertToRupiah(angka) {
+    var rupiah = '';
+    var angkarev = angka.toString().split('').reverse().join('');
+    for (var i = 0; i < angkarev.length; i++)
+      if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+    return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+  }
 </script>
 
 

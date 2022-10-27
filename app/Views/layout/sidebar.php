@@ -51,110 +51,30 @@
             <p class="text">Toko</p>
           </a>
         </li>
+        <li class="nav-item <?= $seg == 'product' || $seg == 'kategori' ? 'menu-open menu-is-open':''?>">
+          <a href="#" class="nav-link ">
+            <i class="nav-icon fas fa-archive"></i>
+            <p>
+              Produk
+              <i class="end fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('kategori')?>" class="nav-link <?= $seg == 'kategori' ? 'active':''?>">
+                <i class="nav-icon far fa-circle"></i>
+                <p>Kategori</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?= base_url('product')?>" class="nav-link <?= $seg == 'product' ? 'active':''?>">
+                <i class="nav-icon far fa-circle"></i>
+                <p>Produk</p>
+              </a>
+            </li>
+          </ul>
+        </li>
 
-        <li class="nav-item ">
-          <a href="javascript:;" class="nav-link ">
-            <i class="nav-icon fas fa-circle"></i>
-            <p>
-              Layout Options
-              <span class="badge bg-info float-end me-3">6</span>
-              <i class="end fas fa-angle-left"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="./pages/layout/fixed-sidebar.html" class="nav-link ">
-                <i class="nav-icon far fa-circle"></i>
-                <p>Fixed Sidebar</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-header">MULTI LEVEL EXAMPLE</li>
-        <li class="nav-item">
-          <a href="javascript:;" class="nav-link">
-            <i class="nav-icon fas fa-circle"></i>
-            <p>Level 1</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:;" class="nav-link">
-            <i class="nav-icon fas fa-circle"></i>
-            <p>
-              Level 1
-              <i class="end fas fa-angle-left"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="javascript:;" class="nav-link">
-                <i class="nav-icon far fa-circle"></i>
-                <p>Level 2</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="javascript:;" class="nav-link">
-                <i class="nav-icon far fa-circle"></i>
-                <p>
-                  Level 2
-                  <i class="end fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="javascript:;" class="nav-link">
-                    <i class="nav-icon far fa-dot-circle"></i>
-                    <p>Level 3</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="javascript:;" class="nav-link">
-                    <i class="nav-icon far fa-dot-circle"></i>
-                    <p>Level 3</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="javascript:;" class="nav-link">
-                    <i class="nav-icon far fa-dot-circle"></i>
-                    <p>Level 3</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a href="javascript:;" class="nav-link">
-                <i class="nav-icon far fa-circle"></i>
-                <p>Level 2</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:;" class="nav-link">
-            <i class="nav-icon fas fa-circle"></i>
-            <p>Level 1</p>
-          </a>
-        </li>
-        <li class="nav-header">LABELS</li>
-        <li class="nav-item">
-          <a href="javascript:;" class="nav-link">
-            <i class="nav-icon far fa-circle text-danger"></i>
-            <p class="text">Important</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:;" class="nav-link">
-            <i class="nav-icon far fa-circle text-warning"></i>
-            <p>Warning</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:;" class="nav-link">
-            <i class="nav-icon far fa-circle text-info"></i>
-            <p>Informational</p>
-          </a>
-        </li>
-      </ul>
     </nav>
   </div>
   <!-- /.sidebar -->
