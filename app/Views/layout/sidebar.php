@@ -22,6 +22,7 @@
             </p>
           </a>
         </li>
+        <?php if(session()->get('username') == 'admin') :?>
         <li class="nav-item <?= $seg == 'userbiodata' || $seg == 'user' ? 'menu-open menu-is-open':''?>">
           <a href="#" class="nav-link ">
             <i class="nav-icon fa fa-user"></i>
@@ -45,6 +46,7 @@
             </li>
           </ul>
         </li>
+        <?php endif;?>
         <li class="nav-item">
           <a href="<?= base_url('toko')?>" class="nav-link <?= $seg == 'toko' ? 'active':''?>">
             <i class="nav-icon fa fa-store"></i>

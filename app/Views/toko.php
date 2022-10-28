@@ -50,7 +50,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="nm_user" class="col-form-label"> Nama Pengguna: </label>
+                <label for="nm_user" class="col-form-label"> Nama Pemilik: </label>
                 <select class="form-control" name="nm_user" id="nm_user">
                   <?php session()->get('username') != 'admin' ? '' : '<option value="">-- Pilih Pengguna -- </option>' ?>
                   <?php foreach ($userbio as $data) : ?>
