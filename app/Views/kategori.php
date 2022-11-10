@@ -228,8 +228,6 @@
     });
   }
 
-
-
   function remove(id_kategori) {
     Swal.fire({
       title: "Hapus Kategori",

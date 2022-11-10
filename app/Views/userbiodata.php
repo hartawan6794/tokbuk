@@ -58,14 +58,14 @@
             </div>
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="nm_user" class="col-form-label">Masaukan Nama: <span class="text-danger">*</span> </label>
-                <input type="text" id="nm_user" name="nm_user" class="form-control" placeholder="Nm user">
+                <label for="email_user" class="col-form-label">Masukan Email: <span class="text-danger">*</span> </label>
+                <input type="texts" id="email_user" name="email_user" class="form-control" placeholder="Email user">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="email_user" class="col-form-label">Masukan Email: <span class="text-danger">*</span> </label>
-                <input type="texts" id="email_user" name="email_user" class="form-control" placeholder="Email user">
+                <label for="nm_user" class="col-form-label">Masaukan Nama: <span class="text-danger">*</span> </label>
+                <input type="text" id="nm_user" name="nm_user" class="form-control" placeholder="Nm user">
               </div>
             </div>
             <div class="col-md-12">
@@ -112,6 +112,26 @@
                 <input type="file" id="imguser" name="imguser" class="form-control" placeholder="Imguser">
               </div>
             </div>
+            <div class="col-md-12" id="roleForm">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="username" class="col-form-label">> Masukan Username :</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Masukan Username">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="role" class="col-form-label"> Daftar Sebagai: </label>
+                    <select class="form-control" name="role" id="role">
+                      <option value="">-- Pilih Jenis Akun -- </option>
+                      <option value="1">Penjual</option>
+                      <option value="2">Pembeli</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="col-md-12" id="passForm">
               <div class="row">
                 <div class="col-md-6">
@@ -129,17 +149,6 @@
               </div>
             </div>
           </div>
-          <div class="col-md-12" id="roleForm">
-            <div class="form-group mb-3">
-              <label for="role" class="col-form-label"> Daftar Sebagai: </label>
-              <select class="form-control" name="role" id="role">
-                <option value="">-- Pilih Jenis Akun -- </option>
-                <option value="1">Penjual</option>
-                <option value="2">Pembeli</option>
-              </select>
-            </div>
-          </div>
-
           <div class="form-group text-center">
             <div class="btn-group">
               <button type="submit" class="btn btn-success mr-2" id="form-btn">Tambah Data</button>
@@ -224,6 +233,8 @@
     $("#data-form")[0].reset();
     $('#passForm').show()
     $('#roleForm').show()
+    $("#data-form #email_user").prop('readonly',false)
+    $("#data-form #nik_user").prop('readonly',false)
     $(".form-control").removeClass('is-invalid').removeClass('is-valid');
     if (typeof id_user_bio === 'undefined' || id_user_bio < 1) { //add
       urlController = '<?= base_url($controller . "/add") ?>';
@@ -252,9 +263,10 @@
           $('#data-modal').modal('show');
           //insert data to form
           $("#data-form #id_user_bio").val(response.id_user_bio);
-          $("#data-form #nik_user").prop('readonly',true);
+          $("#data-form #nik_user").prop('readonly', true);
           $("#data-form #nik_user").val(response.nik_user);
           $("#data-form #nm_user").val(response.nm_user);
+          $("#data-form #email_user").prop('readonly',true)
           $("#data-form #email_user").val(response.email_user);
           $("#data-form #gender").val(response.gender);
           $("#data-form #tanggal_lahir").val(response.tanggal_lahir);
@@ -262,9 +274,9 @@
           $("#data-form #telpon").val(response.telpon);
           $("#data-form #alamat").val(response.alamat);
           $("#data-form .viewImage").append(
-          (response.imguser ?
-            `<img style="width: 50%;" src='/img/user/${response.imguser}'>` :
-            `<span class="text-danger">Belum Unggah Photo</span>`) );
+            (response.imguser ?
+              `<img style="width: 50%;" src='/img/user/${response.imguser}'>` :
+              `<span class="text-danger">Belum Unggah Photo</span>`));
 
         }
       });
@@ -487,30 +499,30 @@
     $("#viewModal").modal("show");
 
   }
-  
+
   function tgl_indo(string) {
-      bulanIndo = [
-        "",
-        "Januari",
-        "Februari",
-        "Maret",
-        "April",
-        "Mei",
-        "Juni",
-        "Juli",
-        "Agustus",
-        "September",
-        "Oktober",
-        "November",
-        "Desember",
-      ];
+    bulanIndo = [
+      "",
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
 
-      tanggal = string.split("-")[2];
-      bulan = string.split("-")[1];
-      tahun = string.split("-")[0];
+    tanggal = string.split("-")[2];
+    bulan = string.split("-")[1];
+    tahun = string.split("-")[0];
 
-      return tanggal + " " + bulanIndo[Math.abs(bulan)] + " " + tahun;
-    }
+    return tanggal + " " + bulanIndo[Math.abs(bulan)] + " " + tahun;
+  }
 </script>
 
 

@@ -122,6 +122,7 @@ class Product extends BaseController
 			$this->request->getFile('imgproduct3')
 		];
 
+
 		$this->validation->setRules([
 			'id_toko' => ['label' => 'Id toko', 'rules' => 'required|numeric|min_length[0]|max_length[6]'],
 			'judul_buku' => ['label' => 'Judul buku', 'rules' => 'required|min_length[0]|max_length[255]'],
@@ -146,13 +147,15 @@ class Product extends BaseController
 			$fileName = array();
 			for ($i = 0; $i < count($img); $i++) {
 				if ($img[$i]->getName() != '') {
-					$fileName[$i] = 'product-' . $img[$i]->getRandomName();
 
-					$data['imgproduct' . $d] = $fileName[$i];
+					$fileName[$i] = 'product-' . $img[$i]->getRandomName();
+					$fields['imgproduct' . $d] = $fileName[$i];
 					$img[$i]->move(WRITEPATH . '../public/img/product', $fileName[$i]);
 				}
 				$d++;
 			}
+		// var_dump($fields);die;
+
 			if ($this->productModel->insert($fields)) {
 
 				$response['success'] = true;
@@ -219,6 +222,7 @@ class Product extends BaseController
 			$fileName = array();
 			for ($i = 0; $i < count($img); $i++) {
 				if ($img[$i]->getName() != '') {
+					
 					if (file_exists('img/product/' . $imgDelete[$i])) {
 						unlink('img/product/' . $imgDelete[$i]);
 					}
