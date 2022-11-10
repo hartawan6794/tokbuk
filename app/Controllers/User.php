@@ -58,6 +58,7 @@ class User extends BaseController
 			$data['data'][$key] = array(
 				$i,
 				$value->username,
+				$value->nik_user,
 				$value->password,
 				$value->role == '0' ? 'Admin' : ($value->role == '1' ? 'Penjual' : 'Pembeli'),
 				$ops

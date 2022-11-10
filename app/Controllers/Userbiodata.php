@@ -19,22 +19,21 @@ class Userbiodata extends BaseController
 		$this->userbiodataModel = new UserbiodataModel();
 		$this->userModel = new UserModel();
 		$this->validation =  \Config\Services::validation();
-        // $this->session = \Config\Services::session();
+		// $this->session = \Config\Services::session();
 		helper('settings');
 	}
 
 	public function index()
 	{
-		if(session()->get('isLogin')){
+		if (session()->get('isLogin')) {
 			$data = [
 				'controller'    	=> 'userbiodata',
 				'title'     		=> 'Userbiodata'
 			];
 			return view('userbiodata', $data);
-        }else{
-            return view('login');
-        }
-		
+		} else {
+			return view('login');
+		}
 	}
 
 	public function getAll()
@@ -104,13 +103,14 @@ class Userbiodata extends BaseController
 		$fields['telpon'] = $this->request->getPost('telpon');
 		$fields['alamat'] = $this->request->getPost('alamat');
 		$fields['imguser'] = $this->request->getFile('imguser');
-
-		// $d = $this->request->getPost();
-		// var_dump($fields['imguser']->guessExtension());die;
-
+		$fields['username'] = $this->request->getPost('username');
 		$fields['pass'] = $this->request->getPost('pass');
 		$fields['confpass'] = $this->request->getPost('confpass');
 		$fields['role'] = $this->request->getPost('role');
+
+		// $d = $this->request->getPost();
+		// var_dump($fields);
+		// die;
 
 		$userbiodata = array(
 			'nik_user' => $fields['nik_user'],
@@ -125,7 +125,9 @@ class Userbiodata extends BaseController
 		);
 
 		$user = array(
-			'username' => $fields['nik_user'],
+			'username' => str_replace(" ","",$fields['username']),
+			'nik_user' => $fields['nik_user'],
+			'email_user' => $fields['email_user'],
 			'status' => 10,
 			'password' => md5($fields['pass']),
 			'role' => $fields['role'],
@@ -174,6 +176,13 @@ class Userbiodata extends BaseController
 					'required' => 'Alamat Masih Kosong'
 				]
 			],
+			'username' => [
+				'rules' => 'required|trim',
+				'errors' => [
+					'required' => 'Username tidak boleh kosong',
+					'trim' => 'Username tidak boleh spasi'
+				]
+			],
 			'pass' => [
 				'rules' => 'required|min_length[4]',
 				'errors' => [
@@ -218,7 +227,6 @@ class Userbiodata extends BaseController
 				$userbiodata['imguser'] = $fileName;
 				$fields['imguser']->move(WRITEPATH . '../public/img/user', $fileName);
 			}
-
 			if ($this->userbiodataModel->insert($userbiodata)) {
 
 				$this->userModel->insert($user);
@@ -249,7 +257,7 @@ class Userbiodata extends BaseController
 		$fields['alamat'] = $this->request->getPost('alamat');
 		$fields['imguser'] = $this->request->getFile('imguser');
 		$fields['updated_at'] = $create;
-		
+
 		$userbiodata = array(
 			'nik_user' => $fields['nik_user'],
 			'nm_user' => $fields['nm_user'],
@@ -324,7 +332,7 @@ class Userbiodata extends BaseController
 				$data = $this->userbiodataModel->where('id_user_bio', $fields['id_user_bio'])->first();
 				if ($data->imguser) {
 					if (file_exists('img/user/' . $data->imguser)) {
-					unlink('img/user/' . $data->imguser);
+						unlink('img/user/' . $data->imguser);
 					}
 				}
 				$fileName = 'profile-' . $fields['nik_user'] . '.' . $fields['imguser']->guessExtension();
@@ -354,7 +362,6 @@ class Userbiodata extends BaseController
 
 		$data = $this->userbiodataModel->where('id_user_bio', $id)->first();
 		if (!$this->validation->check($id, 'required|numeric')) {
-
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
 		} else {
 			if ($data->imguser != '') {
@@ -363,18 +370,14 @@ class Userbiodata extends BaseController
 				}
 			}
 			if ($this->userbiodataModel->where('id_user_bio', $id)->delete()) {
-
-				$this->userModel->where('username',$data->nik_user)->delete();
-
+				$this->userModel->where('nik_user', $data->nik_user)->delete();
 				$response['success'] = true;
 				$response['messages'] = "Data berhasil dihapus";
 			} else {
-
 				$response['success'] = false;
 				$response['messages'] = "Data gagal dihapus";
 			}
 		}
-
 		return $this->response->setJSON($response);
 	}
 }

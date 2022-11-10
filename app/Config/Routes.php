@@ -49,6 +49,7 @@ $routes->get('/', 'Home::index');
 //     $routes->get('(:any)', 'user::form');
 //     $routes->post('prosses', 'user::prosses');
 // });
+$routes->get('api/userapi','Api\UserApi::index');
 
 /*
  * --------------------------------------------------------------------

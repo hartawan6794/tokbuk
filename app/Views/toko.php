@@ -33,8 +33,6 @@
 </div>
 <!-- /.card -->
 
-<!-- /Main content -->
-
 <!-- ADD modal content -->
 <div id="data-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md">
@@ -98,11 +96,8 @@
 </div>
 <!-- /ADD modal content -->
 
-
-
 <?= $this->endSection() ?>
 <!-- /.content -->
-
 
 <!-- page script -->
 <?= $this->section("pageScript") ?>
@@ -262,8 +257,6 @@
 
     });
   }
-
-
 
   function remove(id_toko) {
     Swal.fire({
