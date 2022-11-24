@@ -65,7 +65,7 @@ class Login extends BaseController
                 </script>
                 <?php
             } else {
-                $userbio = $this->userbio->where('nik_user', $username)->first();
+                $userbio = $this->userbio->join('tbl_user tu','tu.nik_user = tbl_user_biodata.nik_user and tu.email_user = tbl_user_biodata.email_user')->where('tu.username', $username)->first();
                 if ($this->checkPassword($password)) {
                     $session = [
                         'isLogin' => true,

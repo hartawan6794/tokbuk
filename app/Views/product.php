@@ -6,10 +6,10 @@
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <div class="col-10 mt-2">
+      <div class="col-9 mt-2">
         <h3 class="card-title">Product</h3>
       </div>
-      <div class="col-2">
+      <div class="col-3">
         <button type="button" class="btn float-right btn-success" onclick="save()" title="Tambah Produk"> <i class="fa fa-plus"></i> Tambah Produk</button>
       </div>
     </div>
@@ -53,7 +53,7 @@
             <div class="col-md-12">
               <div class="form-group mb-3">
                 <label for="id_toko" class="col-form-label"> Nama Toko: </label>
-                <select class="form-control" name="id_toko" id="id_toko">
+                <select class="form-control" name="id_toko" id="id_toko" onchange="showKab(this.value)">
                   <?php session()->get('username') == 'admin' ? '<option value="">-- Pilih Toko -- </option>' : '' ?>
                   <?php foreach ($toko as $data) : ?>
                     <option value="<?= $data->id_toko ?>"><?= $data->nm_toko ?></option>
@@ -112,6 +112,12 @@
               <div class="form-group mb-3">
                 <label for="stok" class="col-form-label"> Stok: </label>
                 <input type="number" id="stok" name="stok" class="form-control" placeholder="Stok" minlength="0" maxlength="6">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="berat" class="col-form-label"> Berat: </label>
+                <input type="number" id="berat" name="berat" class="form-control" placeholder="Berat Produk" minlength="0" maxlength="6">
               </div>
             </div>
             <div class="col-md-12">
@@ -280,6 +286,7 @@
           $("#data-form #deskripsi_buku").val(response.deskripsi_buku);
           $("#data-form #id_kategori").val(response.id_kategori);
           $("#data-form #stok").val(response.stok);
+          $("#data-form #berat").val(response.berat_produk);
           $("#data-form #harga_buku").val(response.harga_buku);
           $("#data-form .viewImage1").append(
             (response.imgproduct1 ?
@@ -455,7 +462,6 @@
         $("#view").html("Sedang Mengambil Data. . ");
       },
       success: function(x) {
-        console.log(x)
         $(".modal-body #view").html("");
         $(".modal-body #view").append(
           `
@@ -499,6 +505,10 @@
                     <tr>
                         <th>Stok Buku</th>
                         <td>${x.stok}</td>
+                    </tr>
+                    <tr>
+                        <th>Berat Produk</th>
+                        <td>${x.berat_produk} Kg</td>
                     </tr>
                     <tr>
                         <th>Gambar Buku</th>
@@ -555,6 +565,7 @@
       if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
     return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
   }
+
 </script>
 
 
