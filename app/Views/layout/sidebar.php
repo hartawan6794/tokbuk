@@ -53,6 +53,12 @@
             <p class="text">Toko</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="<?= base_url('alamatkirim')?>" class="nav-link <?= $seg == 'alamatkirim' ? 'active':''?>">
+          <i class="nav-icon fa fa-map-location-dot"></i>
+          <p class="text">Alamat Kirim</p>
+          </a>
+        </li>
         <li class="nav-item <?= $seg == 'product' || $seg == 'kategori' ? 'menu-open menu-is-open':''?>">
           <a href="#" class="nav-link ">
             <i class="nav-icon fas fa-archive"></i>

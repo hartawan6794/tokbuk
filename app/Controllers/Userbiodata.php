@@ -228,12 +228,10 @@ class Userbiodata extends BaseController
 				$fields['imguser']->move(WRITEPATH . '../public/img/user', $fileName);
 			}
 			if ($this->userbiodataModel->insert($userbiodata)) {
-
 				$this->userModel->insert($user);
 				$response['success'] = true;
 				$response['messages'] = "Data berhasil ditambah";
 			} else {
-
 				$response['success'] = false;
 				$response['messages'] = "Data gagal ditambah";
 			}
@@ -269,7 +267,6 @@ class Userbiodata extends BaseController
 			'alamat' => $fields['alamat'],
 			'updated_at' => $create
 		);
-
 
 		$this->validation->setRules([
 			'nik_user' => ['label' => 'Nik user', 'rules' => 'required|min_length[0]|max_length[20]', 'errors' => [
@@ -341,7 +338,7 @@ class Userbiodata extends BaseController
 			}
 
 			if ($this->userbiodataModel->update($fields['id_user_bio'], $userbiodata)) {
-
+				// $this->user->update($fields['nik_user'],$user);
 				$response['success'] = true;
 				$response['messages'] = "Data berhasil diubah";
 			} else {

@@ -36,7 +36,7 @@ class Product extends BaseController
 			'controller'    	=> 'product',
 			'title'     		=> 'Product',
 			'toko'				=> 	$toko->getResult(),
-			'kategori'	 		=> $kategori->getResult(),
+			'kategori'	 		=>  $kategori->getResult(),
 		];
 		// var_dump($data);die;
 
@@ -88,9 +88,9 @@ class Product extends BaseController
 		if ($this->validation->check($id, 'required|numeric')) {
 
 			$data = $this->productModel
-			->join('tbl_toko','tbl_toko.id_toko = tbl_product.id_toko')
-			->join('tbl_kategori','tbl_kategori.id_kategori = tbl_product.id_kategori','left')
-			->where('id_product', $id)->first();
+				->join('tbl_toko', 'tbl_toko.id_toko = tbl_product.id_toko')
+				->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_product.id_kategori', 'left')
+				->where('id_product', $id)->first();
 			// var_dump($data);die;
 
 			return $this->response->setJSON($data);
@@ -114,6 +114,7 @@ class Product extends BaseController
 		$fields['deskripsi_buku'] = $this->request->getPost('deskripsi_buku');
 		$fields['id_kategori'] = $this->request->getPost('id_kategori');
 		$fields['stok'] = $this->request->getPost('stok');
+		$fields['baret_produk'] = $this->request->getPost('berat');
 		$fields['harga_buku'] = $this->request->getPost('harga_buku');
 		// $fields['created_at'] = $created;
 		$img = [
@@ -134,6 +135,24 @@ class Product extends BaseController
 			'id_kategori' => ['label' => 'id_kategori', 'rules' => 'permit_empty|numeric|min_length[0]|max_length[2]'],
 			'stok' => ['label' => 'Stok', 'rules' => 'permit_empty|numeric|min_length[0]|max_length[6]'],
 			'harga_buku' => ['label' => 'Harga buku', 'rules' => 'permit_empty|min_length[0]|max_length[10]'],
+			'imgproduct1' => [
+				'label' => 'imgproduct1', 'rules' => 'uploaded[imgproduct1]'
+				. '|is_image[imgproduct1]'
+				. '|mime_in[imgproduct1,image/jpg,image/jpeg,image/png,image/webp]'
+				. '|max_size[imgproduct1,512]','errors' => ['max_size' => 'Ukuran file harus di bawah 512Kb','mime_in' => 'Harap Masukan File Berupa Gambar' ,'is_image' => 'Harap Masukan File Berupa Gambar']
+			],
+			'imgproduct2' => [
+				'label' => 'imgproduct2', 'rules' => 'uploaded[imgproduct2]'
+				. '|is_image[imgproduct2]'
+				. '|mime_in[imgproduct2,image/jpg,image/jpeg,image/png,image/webp]'
+				. '|max_size[imgproduct2,512]','errors' => ['max_size' => 'Ukuran file harus di bawah 512Kb','mime_in' => 'Harap Masukan File Berupa Gambar' ,'is_image' => 'Harap Masukan File Berupa Gambar']
+			],
+			'imgproduct3' => [
+				'label' => 'imgproduct3', 'rules' => 'uploaded[imgproduct3]'
+				. '|is_image[imgproduct3]'
+				. '|mime_in[imgproduct3,image/jpg,image/jpeg,image/png,image/webp]'
+				. '|max_size[imgproduct3,512]','errors' => ['max_size' => 'Ukuran file harus di bawah 512Kb','mime_in' => 'Harap Masukan File Berupa Gambar' ,'is_image' => 'Harap Masukan File Berupa Gambar']
+			]
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {
@@ -154,7 +173,7 @@ class Product extends BaseController
 				}
 				$d++;
 			}
-		// var_dump($fields);die;
+			// var_dump($fields);die;
 
 			if ($this->productModel->insert($fields)) {
 
@@ -184,6 +203,7 @@ class Product extends BaseController
 		$fields['deskripsi_buku'] = $this->request->getPost('deskripsi_buku');
 		$fields['id_kategori'] = $this->request->getPost('id_kategori');
 		$fields['stok'] = $this->request->getPost('stok');
+		$fields['baret_produk'] = $this->request->getPost('berat');
 		$fields['harga_buku'] = $this->request->getPost('harga_buku');
 		$img = [
 			$this->request->getFile('imgproduct1'),
@@ -222,7 +242,7 @@ class Product extends BaseController
 			$fileName = array();
 			for ($i = 0; $i < count($img); $i++) {
 				if ($img[$i]->getName() != '') {
-					
+
 					if (file_exists('img/product/' . $imgDelete[$i])) {
 						unlink('img/product/' . $imgDelete[$i]);
 					}

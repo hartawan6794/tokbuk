@@ -20,9 +20,25 @@ class TblAlamat extends Migration
                 // 'auto_increment' => true
                 'null' => true,
             ],
+            'nm_penerima' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255'
+            ],
+            'telp_penerima' => [
+                'type' => 'VARCHAR',
+                'constraint' => '15'
+            ],
+            'id_provinsi'=>[
+                'type' => 'TINYINT',
+                'constraint' => 3
+            ],
             'provinsi'=>[
                 'type' => 'VARCHAR',
                 'constraint' => 100
+            ],
+            'id_kabupaten'=>[
+                'type' => 'TINYINT',
+                'constraint' => 3
             ],
             'kabupaten'=>[
                 'type' => 'VARCHAR',
