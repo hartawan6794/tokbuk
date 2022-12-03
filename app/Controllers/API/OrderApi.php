@@ -3,7 +3,8 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use App\Models\KategoriModel;
+use App\Models\OrderDetailModel;
+use App\Models\OrderModel;
 use App\Models\ProductModel;
 
 class OrderApi extends BaseController
@@ -12,6 +13,9 @@ class OrderApi extends BaseController
     public function __construct()
     {
         $this->db = db_connect();
+        $this->order = new OrderModel();
+        $this->orderDetail = new OrderDetailModel();
+        $this->product = new ProductModel();
     }
 
     public function index()
@@ -36,8 +40,8 @@ class OrderApi extends BaseController
         LEFT JOIN tbl_alamat ta ON tub.id_user_bio = ta.id_user_bio WHERE tub.id_user_bio = ?
         ) a';
         $query = $this->db->query($sql, [$id_product, $id_user_bio])->getResult();
-        $data = $this->getHarga($query[0]->dari,$query[0]->ke,$query[0]->berat,$key);
-        if($data){
+        $data = $this->getOngkir($query[0]->dari, $query[0]->ke, $query[0]->berat, $key);
+        if ($data) {
             $response['success'] = true;
             $response['messages'] = 'Data berhasil didapatkan';
             $response['data'] = $data;
@@ -46,7 +50,7 @@ class OrderApi extends BaseController
         return $this->response->setJSON($response);
     }
 
-    public function getHarga($dari, $ke, $berat,$key)
+    public function getOngkir($dari, $ke, $berat, $key)
     {
         $curl = curl_init();
 
@@ -70,16 +74,59 @@ class OrderApi extends BaseController
 
         curl_close($curl);
 
-        $harga = json_decode($response,true);
+        $harga = json_decode($response, true);
         if ($err) {
             return $err;
         } else {
             foreach ($harga['rajaongkir'] as $k) {
-				$hargaData = $k;
-				// foreach($k as $d){
-				// }
-			}
+                $hargaData = $k;
+                // foreach($k as $d){
+                // }
+            }
         }
         return $hargaData;
+    }
+
+    public function input()
+    {
+        $response = array();
+		$create = date('Y-m-d');
+        $id_product = $this->request->getPostGet('id_product');
+        $qty = $this->request->getPostGet('stok');
+        $fields['id_order'] = $this->request->getPostGet('id_order');
+        $fields['invoice'] = $this->order->invoice_no();
+        $fields['id_user_bio'] = $this->request->getPostGet('id_user_bio');
+        $fields['id_rekening'] = $this->request->getPostGet('id_rekening');
+        $fields['tgl_order'] = $create;
+        $fields['sub_total'] = $this->request->getPostGet('sub_total');
+        $fields['sub_total_pengiriman'] = $this->request->getPostGet('sub_total_pengiriman');
+        $fields['total_pembayaran'] = $this->request->getPostGet('total_pembayaran');
+        $fields['create_at'] = $create;
+
+
+        if ($this->order->insert($fields)) {
+
+            $id_order = $this->order->insertID();
+            $product = $this->product->where('id_product',$id_product)->first();
+            $row = [
+                'id_order' => $id_order,
+                'id_product' => $id_product,
+                'harga_product' => $product->harga_buku,
+                'qty' => $qty,
+                'total' => $fields['sub_total']
+            ];
+            $this->orderDetail->insert($row);
+            $response['success'] = true;
+            $response['messages'] = lang("Berhasil Menambahkan Data");
+            $response['data'] = [
+                'invoice' => $fields['invoice']
+            ];
+        } else {
+
+            $response['success'] = false;
+            $response['messages'] = lang("Gagal Menambahkan Data");
+        }
+
+        return $this->response->setJSON($response);
     }
 }
