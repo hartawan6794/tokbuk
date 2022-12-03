@@ -20,7 +20,9 @@ class ProdukApi extends BaseController
         $kategori = $this->request->getPostGet('kategori');
         $id_product = $this->request->getPostGet('id_product');
         if($id_product != ''){
-            $data = $this->produk->join('tbl_kategori tk','tk.id_kategori = tbl_product.id_kategori')->where('tbl_product.id_product', $id_product)->findAll();
+            $data = $this->produk->join('tbl_kategori tk','tk.id_kategori = tbl_product.id_kategori')
+            ->join('tbl_toko tok','tok.id_toko = tbl_product.id_toko','left')
+            ->where('tbl_product.id_product', $id_product)->findAll();
         }
         else if($kategori == '' || $kategori == null){
             $data = $this->produk->findAll();
