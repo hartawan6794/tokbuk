@@ -14,32 +14,45 @@ class TblOrder extends Migration
                 // 'constraint' => 5,
                 'auto_increment' => true
             ],
-            'id_product' => [
-                'type' => 'SMALLINT',
-                // 'constraint' => 5,
-                // 'auto_increment' => true
+            'invoice' => [
+                'type' => 'VARCHAR',
+                'constraint' => '20',
+                'null' => true
             ],
             'id_user_bio' => [
                 'type' => 'SMALLINT',
                 // 'constraint' => 5,
                 // 'auto_increment' => true
             ],
-            'jml_order' => [
+            'id_rekening' => [
                 'type' => 'TINYINT',
-                'constraint' => 3,
             ],
             'bukti_order' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true
             ],
+            'noresi' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
             'tgl_order' => [
                 'type'    => 'TIMESTAMP',
-                'null' => true,
+                // 'null' => true,
             ],
-            // 'id_alamat' => [
-            //     'type' => 'SMALLINT',
-            // ],
+            'sub_total' => [
+                'type'    => 'DECIMAL',
+                // 'null' => true,
+            ],
+            'sub_total_pengiriman' => [
+                'type'    => 'DECIMAL',
+                // 'null' => true,
+            ],
+            'total_pembayaran' => [
+                'type'    => 'DECIMAL',
+                // 'null' => true,
+            ],
             'validasi' => [
                 'type' => 'TINYINT',
                 'constraint' => 3,
@@ -59,7 +72,8 @@ class TblOrder extends Migration
         $this->forge->addField($fields);
         $this->forge->addPrimaryKey('id_order');
         $this->forge->addForeignKey('id_user_bio','tbl_user_biodata','id_user_bio','CASCADE','RESTRICT');
-        $this->forge->addForeignKey('id_product','tbl_product','id_product','CASCADE','RESTRICT');
+        // $this->forge->addForeignKey('id_product','tbl_product','id_product','CASCADE','RESTRICT');
+        $this->forge->addForeignKey('id_rekening','tbl_rekening','id_rekening','CASCADE','RESTRICT');
         $attributes = ['ENGINE' => 'InnoDB'];
         $this->forge->createTable('tbl_order', false, $attributes);
     }

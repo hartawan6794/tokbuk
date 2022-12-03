@@ -56,7 +56,7 @@
         <li class="nav-item">
           <a href="<?= base_url('alamatkirim')?>" class="nav-link <?= $seg == 'alamatkirim' ? 'active':''?>">
           <i class="nav-icon fa fa-map-location-dot"></i>
-          <p class="text">Alamat Kirim</p>
+          <p class="text">Alamat Toko</p>
           </a>
         </li>
         <li class="nav-item <?= $seg == 'product' || $seg == 'kategori' ? 'menu-open menu-is-open':''?>">
@@ -81,6 +81,12 @@
               </a>
             </li>
           </ul>
+        </li>
+        <li class="nav-item">
+          <a href="<?= base_url('rekening')?>" class="nav-link <?= $seg == 'rekening' ? 'active':''?>">
+          <i class="nav-icon fa fa-credit-card"></i>
+          <p class="text">Referensi Rekening</p>
+          </a>
         </li>
 
     </nav>
