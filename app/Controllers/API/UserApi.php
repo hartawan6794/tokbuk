@@ -17,8 +17,9 @@ class UserApi extends BaseController
 
     public function index()
     {
-        $data = $this->userModel->select()->findAll();
-        return $this->response->setJson($data);
+        var_dump(date('dmy'));
+        // $data = $this->userModel->select()->findAll();
+        // return $this->response->setJson($data);
     }
 
     public function login()

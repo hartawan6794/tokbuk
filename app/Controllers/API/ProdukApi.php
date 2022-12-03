@@ -5,6 +5,7 @@ namespace App\Controllers\Api;
 use App\Controllers\BaseController;
 use App\Models\KategoriModel;
 use App\Models\ProductModel;
+use App\Models\RekeningModel;
 
 class ProdukApi extends BaseController
 {
@@ -13,6 +14,7 @@ class ProdukApi extends BaseController
     {
         $this->produk = new ProductModel();
         $this->kategori = new KategoriModel();
+        $this->rek = new RekeningModel();
     }
 
     public function index(){
@@ -49,6 +51,16 @@ class ProdukApi extends BaseController
         $response['data'] = $data;
         return $this->response->setJSON($response);
         
+    }
+
+    public function getRekening()
+    {
+        $response = array();
+        $data = $this->rek->select()->findAll();
+        $response['success'] = true;
+        $response['messages'] = "Data berhasil diubah";
+        $response['data'] = $data;
+        return $this->response->setJson($response);
     }
 
 
