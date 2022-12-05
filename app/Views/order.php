@@ -24,7 +24,7 @@
           <th>Nama Pelanggan</th>
           <th>Ke Rekening</th>
           <th>Total pembayaran</th>
-          <th>Bukti order</th>
+          <th>Bukti Pembayaran</th>
           <th>Validasi</th>
           <th></th>
         </tr>
@@ -136,6 +136,31 @@
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="lihatBukti" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Bukti Pembayaran</h5>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div id="detail">
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <!-- <input type="hidden" id="id_cuti" name="id_cuti" > -->
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <!-- <button type="submit" class="btn btn-primary">Save</button> -->
+      </div>
+    </div>
+  </div>
 </div>
 <!-- /ADD modal content -->
 
@@ -312,7 +337,6 @@
   }
 
 
-
   function remove(id_order) {
     Swal.fire({
       title: "<?= lang("App.remove-title") ?>",
@@ -360,6 +384,100 @@
         });
       }
     })
+  }
+
+  function lihat(id_order) {
+    $('#lihatBukti').modal('show');
+    $('.modal-body #detail').html("")
+    $.ajax({
+      url: '<?php echo base_url($controller . "/getOne") ?>',
+      type: 'post',
+      data: {
+        id_order: id_order
+      },
+      dataType: 'json',
+      success: function(response) {
+        // console.log(response.bukti_order);
+        $('.modal-body #detail').html(`<img style='width: 100%;' src='/img/bukti/${response.bukti_order}'>`)
+      }
+    });
+  }
+
+  function detail(id_order) {
+    $('#lihatBukti').modal('show');
+    $('.modal-body #detail').html("")
+    $.ajax({
+      url: '<?php echo base_url($controller . "/getOne") ?>',
+      type: 'post',
+      data: {
+        id_order: id_order
+      },
+      dataType: 'json',
+      beforeSend: function() {
+        $('.modal-body #detail').html("Sedang mengambil data")
+      },
+      success: function(response) {
+        $(".modal-body #detail").html("");
+        $(".modal-body #detail").append(
+          `
+              <table id="dataTable" class="table table-bordered table-striped">
+                    <tr>
+                        <th>Nomor Invoice</th>
+                        <td>${response.invoice}</td>
+                    </tr>
+                    <tr>
+                        <th>Nama Pelanggan</th>
+                        <td>${response.nm_user}</td>
+                    </tr>
+                    <tr>
+                        <th>Ke Rekening</th>
+                        <td>${response.nm_bank}-${response.no_rek}</td>
+                    </tr>
+                    <tr>
+                        <th>Jenis Pengiriman</th>
+                        <td>${response.jns_pengiriman}</td>
+                    </tr>
+                    <tr>
+                        <th>Judul Buku</th>
+                        <td>${response.judul_buku}</td>
+                    </tr>
+                    <tr>
+                        <th>Jumlah</th>
+                        <td>${response.qty}</td>
+                    </tr>
+                    <tr>
+                        <th>Sub Total</th>
+                        <td>`+convertToRupiah(response.sub_total)+`</td>
+                    </tr>
+                    <tr>
+                        <th>Sub Total Pengiriman</th>
+                        <td>`+convertToRupiah(response.sub_total_pengiriman)+`</td>
+                    </tr>
+                    <tr>
+                        <th>Total Pengiriman</th>
+                        <td>`+convertToRupiah(response.total_pembayaran)+`</td>
+                    </tr>
+                    <tr>
+                        <th>Berat Produk</th>
+                        <td>${response.berat_produk} Kg</td>
+                    </tr>
+                    <tr>
+                        <th>Bukti Pembayaran</th>
+                        <td>` + (response.bukti_order ? `<img style="width: 100%;" src='/img/user/${response.bukti_order}'>` : 'Belum Upload Gambar') + `</td>
+                    </tr>
+                </table>
+              `
+        );
+      }
+    });
+
+    function convertToRupiah(angka) {
+    var rupiah = '';
+    var angkarev = angka.toString().split('').reverse().join('');
+    for (var i = 0; i < angkarev.length; i++)
+      if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+    return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+  }
   }
 </script>
 
