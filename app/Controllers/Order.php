@@ -17,6 +17,7 @@ class Order extends BaseController
 	{
 		$this->orderModel = new OrderModel();
 		$this->validation =  \Config\Services::validation();
+		helper('settings');
 	}
 
 	public function index()
@@ -34,7 +35,7 @@ class Order extends BaseController
 	{
 		$response = $data['data'] = array();
 
-		$result = $this->orderModel->select()->join('tbl_user_biodata tub','tub.id_user_bio = tbl_order.id_user_bio','left')->join('tbl_rekening tr','tr.id_rekening = tbl_order.id_rekening','left')->findAll();
+		$result = $this->orderModel->select()->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->findAll();
 
 		$no = 1;
 		foreach ($result as $key => $value) {
@@ -43,23 +44,30 @@ class Order extends BaseController
 			$ops .= '<button type="button" class=" btn btn-sm dropdown-toggle btn-info" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
 			$ops .= '<i class="fa-solid fa-pen-square"></i>  </button>';
 			$ops .= '<div class="dropdown-menu">';
-			$ops .= '<a class="dropdown-item text-info" onClick="save(' . $value->id_order . ')"><i class="fa-solid fa-pen-to-square"></i>   ' .  lang("App.edit")  . '</a>';
-			$ops .= '<a class="dropdown-item text-orange" ><i class="fa-solid fa-copy"></i>   ' .  lang("App.copy")  . '</a>';
-			$ops .= '<div class="dropdown-divider"></div>';
-			$ops .= '<a class="dropdown-item text-danger" onClick="remove(' . $value->id_order . ')"><i class="fa-solid fa-trash"></i>   ' .  lang("App.delete")  . '</a>';
+			$ops .= '<a class="dropdown-item text-info" onClick="detail(' . $value->id_order . ')"><i class="fa-solid fa-eye"></i>   Detail</a>';
+			// $ops .= '<a class="dropdown-item text-orange" ><i class="fa-solid fa-copy"></i>   ' .  lang("App.copy")  . '</a>';
+			// $ops .= '<div class="dropdown-divider"></div>';
+			// $ops .= '<a class="dropdown-item text-danger" onClick="remove(' . $value->id_order . ')"><i class="fa-solid fa-trash"></i>   ' .  lang("App.delete")  . '</a>';
 			$ops .= '</div></div>';
 
-			$validasi = '<a href="' . $value->id_order . '" ><i class="fa-solid fa-pen-to-square"></i>   Validasi</a>';
-			$validasi .= '<a href="' . $value->id_order . '" ><i class="fa-solid fa-pen-to-square"></i>   Validasi</a>';
-
+			$validai = '<div class="btn-group">';
+			$validai .= '<button type="button" class=" btn btn-sm dropdown-toggle btn-info" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+			$validai .= '<i class="fa-solid fa-pen-square"></i>  Validasi</button>';
+			$validai .= '<div class="dropdown-menu">';
+			$validai .= '<a class="dropdown-item text-info" onClick="valid(' . $value->id_order . ')"><i class="fa-solid fa-check"></i>  Validasi</a>';
+			// $validai .= '<a class="dropdown-item text-orange" ><i class="fa-solid fa-copy"></i>   ' .  lang("App.copy")  . '</a>';
+			$validai .= '<div class="dropdown-divider"></div>';
+			$validai .= '<a class="dropdown-item text-danger" onClick="unvalid(' . $value->id_order . ')"><i class="fa-solid fa-xmark"></i>   Unvalidasi</a>';
+			$validai .= '</div></div>';
 			$data['data'][$key] = array(
 				$no,
 				$value->invoice,
 				$value->nm_user,
 				$value->nm_bank,
-				$value->total_pembayaran,
-				$value->bukti_order ? '':'Belum Upload',
-				$value->validasi == 0? $validasi:'-',
+				rupiah($value->total_pembayaran),
+				$value->bukti_order ? '<button class="btn btn-sm btn-info text-default center" onClick="lihat(' . $value->id_order . ')">Lihat Bukti</button>' : '<span class="p-2 bg-warning"> Belum Upload File</span>',
+				// $value->validasi == 0 ? ($value->bukti_order ? '':'Belum Upload') : '-',
+				$value->bukti_order ? ($value->validasi == 0 ? $validai : ($value->validasi == '1' ? '<span class="p-2 bg-success"> Pembayaran Tervalidasi</span>' : '<span class="p-2 bg-danger"> Pembayaran Invalid</span>')) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				$ops
 			);
 			$no++;
@@ -76,7 +84,7 @@ class Order extends BaseController
 
 		if ($this->validation->check($id, 'required|numeric')) {
 
-			$data = $this->orderModel->where('id_order', $id)->first();
+			$data = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->join('tbl_order_detail tod','tod.id_order = tbl_order.id_order')->join('tbl_product tp','tp.id_product = tod.id_product','left')->where('tbl_order.id_order', $id)->first();
 
 			return $this->response->setJSON($data);
 		} else {

@@ -90,7 +90,7 @@ class OrderApi extends BaseController
     public function input()
     {
         $response = array();
-		$create = date('Y-m-d');
+        $create = date('Y-m-d');
         $id_product = $this->request->getPostGet('id_product');
         $qty = $this->request->getPostGet('stok');
         $fields['id_order'] = $this->request->getPostGet('id_order');
@@ -101,13 +101,14 @@ class OrderApi extends BaseController
         $fields['sub_total'] = $this->request->getPostGet('sub_total');
         $fields['sub_total_pengiriman'] = $this->request->getPostGet('sub_total_pengiriman');
         $fields['total_pembayaran'] = $this->request->getPostGet('total_pembayaran');
+        $fields['jns_pengiriman'] = $this->request->getPostGet('jns_pengiriman');
         $fields['create_at'] = $create;
 
 
         if ($this->order->insert($fields)) {
 
             $id_order = $this->order->insertID();
-            $product = $this->product->where('id_product',$id_product)->first();
+            $product = $this->product->where('id_product', $id_product)->first();
             $row = [
                 'id_order' => $id_order,
                 'id_product' => $id_product,
