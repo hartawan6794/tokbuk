@@ -31,4 +31,9 @@
     <link rel="stylesheet" href="<?= base_url('asset/plugins/datatables/StateRestore-1.1.1/css/stateRestore.bootstrap5.min.css') ?>">
     <!-- Dark style -->
     <!--<link rel="stylesheet" href="<?php /* echo base_url('asset/css/dark/adminlte-dark-addon.min.css')*/ ?>">  --> 
+
+    <!-- select2 -->
+  <link rel="stylesheet" href="<?= base_url() ?>/asset/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="<?= base_url() ?>/asset/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  
 </head>
