@@ -7,6 +7,11 @@ use App\Controllers\BaseController;
 
 use App\Models\OrderModel;
 
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
 class Order extends BaseController
 {
 
@@ -52,12 +57,12 @@ class Order extends BaseController
 
 			$validai = '<div class="btn-group">';
 			$validai .= '<button type="button" class=" btn btn-sm dropdown-toggle btn-info" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-			$validai .= '<i class="fa-solid fa-pen-square"></i>  Validasi</button>';
+			$validai .= '  Validasi</button>';
 			$validai .= '<div class="dropdown-menu">';
-			$validai .= '<a class="dropdown-item text-info" onClick="valid(' . $value->id_order . ')"><i class="fa-solid fa-check"></i>  Validasi</a>';
+			$validai .= '<a class="dropdown-item text-info" onClick="valid(' . $value->id_order . ',2)"><i class="fa-solid fa-check"></i>  Terima</a>';
 			// $validai .= '<a class="dropdown-item text-orange" ><i class="fa-solid fa-copy"></i>   ' .  lang("App.copy")  . '</a>';
 			$validai .= '<div class="dropdown-divider"></div>';
-			$validai .= '<a class="dropdown-item text-danger" onClick="unvalid(' . $value->id_order . ')"><i class="fa-solid fa-xmark"></i>   Unvalidasi</a>';
+			$validai .= '<a class="dropdown-item text-danger" onClick="valid(' . $value->id_order . ',1)"><i class="fa-solid fa-xmark"></i>   Tolak</a>';
 			$validai .= '</div></div>';
 			$data['data'][$key] = array(
 				$no,
@@ -65,9 +70,9 @@ class Order extends BaseController
 				$value->nm_user,
 				$value->nm_bank,
 				rupiah($value->total_pembayaran),
-				$value->bukti_order ? '<button class="btn btn-sm btn-info text-default center" onClick="lihat(' . $value->id_order . ')">Lihat Bukti</button>' : '<span class="p-2 bg-warning"> Belum Upload File</span>',
+				$value->bukti_order ? '<button class="btn btn-sm btn-success text-default center" onClick="lihat(' . $value->id_order . ')">Lihat Bukti</button>' : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				// $value->validasi == 0 ? ($value->bukti_order ? '':'Belum Upload') : '-',
-				$value->bukti_order ? ($value->validasi == 0 ? $validai : ($value->validasi == '1' ? '<span class="p-2 bg-success"> Pembayaran Tervalidasi</span>' : '<span class="p-2 bg-danger"> Pembayaran Invalid</span>')) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
+				$value->bukti_order ? ($value->validasi == 0 ? $validai : ($value->validasi == '2' ? '<span class="p-1 bg-success"> Pembayaran Diterima</span>' : '<span class="p-1 bg-danger"> Pembayaran Ditolak</span>')) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				$ops
 			);
 			$no++;
@@ -84,7 +89,7 @@ class Order extends BaseController
 
 		if ($this->validation->check($id, 'required|numeric')) {
 
-			$data = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->join('tbl_order_detail tod','tod.id_order = tbl_order.id_order')->join('tbl_product tp','tp.id_product = tod.id_product','left')->where('tbl_order.id_order', $id)->first();
+			$data = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order')->join('tbl_product tp', 'tp.id_product = tod.id_product', 'left')->where('tbl_order.id_order', $id)->first();
 
 			return $this->response->setJSON($data);
 		} else {
@@ -225,6 +230,68 @@ class Order extends BaseController
 				$response['messages'] = lang("App.delete-error");
 			}
 		}
+
+		return $this->response->setJSON($response);
+	}
+
+	public function sendEmail()
+	{
+
+		$response = array();
+
+		$data['id_order']          = $this->request->getPost('id_order');
+		$data['validasi']          = $this->request->getPost('validasi');
+
+		$email = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->where('id_order', $data['id_order'])->first();
+		$data['email']          = $email->email_user;
+
+		if ($data['validasi'] == '1') {
+			$message        = "Pembayaran di tolak";
+		} else {
+			$message        = "Pembayaran di terima";
+		}
+
+		if($this->orderModel->update($data['id_order'] ,$data)){
+			$response['success'] = true;
+			$response['messages'] = lang("Berhasil Memvalidasi Data");
+		} else {
+
+			$response['success'] = false;
+			$response['messages'] = lang("Gagal Memvalidasi Data");
+		}
+
+		
+
+		//Create an instance; passing `true` enables exceptions
+		// $mail = new PHPMailer(true);
+
+		// try {
+		// 	//Server settings
+		// 	$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+		// 	$mail->isSMTP();
+		// 	$mail->Host = "mail.ptmutiaraferindo.my.id";                   //Set the SMTP server to send through
+		// 	$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+		// 	$mail->Username = "_mainaccount@ptmutiaraferindo.my.id";
+		// 	$mail->Password = "pjpquY1E9JKT51";                          //SMTP password
+		// 	$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+		// 	$mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+		// 	//Recipients
+		// 	$mail->setFrom("_mainaccount@ptmutiaraferindo.my.id","Toko Buku");
+		// 	$mail->addAddress($data['email'], "Kostumer");
+		// 	$mail->isHTML(true);
+		// 	//Content
+		// 	$mail->Subject = "Konfirmasi Pembayaran";
+		// 	$mail->Body = $message;
+		// 	$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+		// 	$mail->send();
+		// 	echo 'Message has been sent';
+		// } catch (Exception $e) {
+		// 	echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+		// }
+
+		
 
 		return $this->response->setJSON($response);
 	}

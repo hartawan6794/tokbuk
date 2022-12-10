@@ -107,6 +107,8 @@ class OrderApi extends BaseController
 
         if ($this->order->insert($fields)) {
 
+            // $this->product->
+
             $id_order = $this->order->insertID();
             $product = $this->product->where('id_product', $id_product)->first();
             $row = [
@@ -130,4 +132,84 @@ class OrderApi extends BaseController
 
         return $this->response->setJSON($response);
     }
+
+    public function getPemesanan()
+    {
+
+        $response = array();
+        $id_user_bio = $this->request->getPostGet('id_user_bio');
+
+        $data = $this->order->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'left')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr','tr.id_rekening = tbl_order.id_rekening','left')->where(['id_user_bio' => $id_user_bio])->findAll();
+
+        $response['success'] = true;
+        $response['messages'] = lang("Berhasil Mendapatkan Data");
+        $response['data'] = $data;
+        return $this->response->setJSON($response);
+    }
+
+    public function getPemesananOne()
+    {
+
+        $response = array();
+
+        $id_order = $this->request->getPostGet('id_order');
+        $data = $this->order->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'left')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_toko tt', 'tp.id_toko = tt.id_toko', 'left')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr', 'tbl_order.id_rekening = tr.id_rekening', 'left')->where(['tbl_order.id_order' => $id_order])->findAll();
+
+        $response['success'] = true;
+        $response['messages'] = lang("Berhasil Mendapatkan Data");
+        $response['data'] = $data;
+        return $this->response->setJSON($response);
+    }
+
+
+    public function hapusPesanan()
+    {
+        $response = array();
+        $id_order = $this->request->getPostGet('id_order');
+        if ($id_order != null) {
+            $qty = $this->orderDetail->join('tbl_product tp', 'tp.id_product = tbl_order_detail.id_product', 'left')->where('id_order', $id_order)->first();
+            $oldStok = $qty->stok + $qty->qty;
+            if ($this->product->set('stok', $oldStok)->where('id_product', $qty->id_product)->update()) {
+                if ($this->order->where('id_order', $id_order)->delete()) {
+                    $this->orderDetail->where('id_order', $id_order)->delete();
+                    $response['success'] = true;
+                    $response['messages'] = lang("Berhasil Menambahkan Data");
+                }
+            } else {
+                $response['success'] = false;
+                $response['messages'] = lang("Gagal Menambahkan Data");
+            }
+        }
+
+        return $this->response->setJSON($response);
+    }
+
+    
+    public function upload(){
+        
+        $response = array();
+		$fields['id_order'] = $this->request->getPostGet('id_order');
+		$fields['bukti_order'] = $this->request->getFile('bukti_order');
+
+        // $data = $this->userModel->where('id_user_bio', $fields['id_user_bio'])->first();
+
+        if ($fields['bukti_order']->getName() != '') {
+            $fileName = 'bukti-' . $fields['bukti_order']->getRandomName();
+            $order['bukti_order'] = $fileName;
+            $order['kd_file'] = '1';
+            $fields['bukti_order']->move(WRITEPATH . '../public/img/bukti', $fileName);
+        }
+        if ($this->order->update($fields['id_order'], $order)) {
+
+            $response['success'] = true;
+            $response['messages'] = "Bukti berhasil di upload";
+        } else {
+
+            $response['success'] = false;
+            $response['messages'] = "Bukti gagal di upload";
+        }
+        
+        return $this->response->setJSON($response);
+    }
+
 }

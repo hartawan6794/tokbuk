@@ -10,7 +10,7 @@ class OrderModel extends Model {
 	protected $primaryKey = 'id_order';
 	protected $returnType = 'object';
 	protected $useSoftDeletes = false;
-	protected $allowedFields = ['invoice', 'id_user_bio', 'id_rekening', 'bukti_order', 'noresi', 'tgl_order', 'sub_total', 'sub_total_pengiriman', 'total_pembayaran', 'validasi', 'created_at', 'updated_at'];
+	protected $allowedFields = ['invoice', 'id_user_bio', 'id_rekening', 'bukti_order', 'noresi', 'tgl_order', 'sub_total', 'sub_total_pengiriman', 'total_pembayaran', 'validasi', 'created_at', 'updated_at','jns_pengiriman','kd_file'];
 	protected $useTimestamps = false;
 	protected $createdField  = 'created_at';
 	protected $updatedField  = 'updated_at';
