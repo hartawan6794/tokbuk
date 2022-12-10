@@ -242,57 +242,56 @@ class Order extends BaseController
 		$data['id_order']          = $this->request->getPost('id_order');
 		$data['validasi']          = $this->request->getPost('validasi');
 
-		$email = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->where('id_order', $data['id_order'])->first();
-		$data['email']          = $email->email_user;
+		$dataOrder = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->where('id_order', $data['id_order'])->first();
 
 		if ($data['validasi'] == '1') {
-			$message        = "Pembayaran di tolak";
-		} else {
-			$message        = "Pembayaran di terima";
-		}
+			$message        = "Pembayaran di tolak
+			Invoice : ".$dataOrder->invoice."
 
-		if($this->orderModel->update($data['id_order'] ,$data)){
+			
+			PESAN NO-REPLAY";
+		} else {
+			$message        = "Pembayaran di terima
+			Invoice : ".$dataOrder->invoice."
+
+
+			PESAN NO-REPLAY";
+		}
+		// Create an instance; passing `true` enables exceptions
+		$mail = new PHPMailer(true);
+
+		// try {
+		//Server settings
+		// $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+		$mail->isSMTP();
+		$mail->Host = "smtp.gmail.com";                   //Set the SMTP server to send through
+		$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+		$mail->Username = "julihartawan06@gmail.com";
+		$mail->Password = "wrwifaxbfpuqatnc";                          //SMTP password
+		$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+		$mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+		//Recipients
+		$mail->setFrom("julihartawan06@gmail.com", "Toko Buku");
+		$mail->addAddress($dataOrder->email_user, $dataOrder->nm_user);
+		$mail->isHTML(true);
+		//Content
+		$mail->Subject = "Konfirmasi Pembayaran";
+		$mail->Body = $message;
+		$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+		if ($mail->send()) {
+			$this->orderModel->update($data['id_order'], $data);
 			$response['success'] = true;
-			$response['messages'] = lang("Berhasil Memvalidasi Data");
+			$response['messages'] = lang("Berhasil Mengirim Email Validasi");
 		} else {
 
 			$response['success'] = false;
-			$response['messages'] = lang("Gagal Memvalidasi Data");
+			$response['messages'] = lang("Gagal Mengirim Email Validasi");
 		}
-
-		
-
-		//Create an instance; passing `true` enables exceptions
-		// $mail = new PHPMailer(true);
-
-		// try {
-		// 	//Server settings
-		// 	$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-		// 	$mail->isSMTP();
-		// 	$mail->Host = "mail.ptmutiaraferindo.my.id";                   //Set the SMTP server to send through
-		// 	$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-		// 	$mail->Username = "_mainaccount@ptmutiaraferindo.my.id";
-		// 	$mail->Password = "pjpquY1E9JKT51";                          //SMTP password
-		// 	$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-		// 	$mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-		// 	//Recipients
-		// 	$mail->setFrom("_mainaccount@ptmutiaraferindo.my.id","Toko Buku");
-		// 	$mail->addAddress($data['email'], "Kostumer");
-		// 	$mail->isHTML(true);
-		// 	//Content
-		// 	$mail->Subject = "Konfirmasi Pembayaran";
-		// 	$mail->Body = $message;
-		// 	$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-		// 	$mail->send();
-		// 	echo 'Message has been sent';
 		// } catch (Exception $e) {
 		// 	echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 		// }
-
-		
-
 		return $this->response->setJSON($response);
 	}
 }
