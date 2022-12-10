@@ -447,15 +447,15 @@
                     </tr>
                     <tr>
                         <th>Sub Total</th>
-                        <td>`+convertToRupiah(response.sub_total)+`</td>
+                        <td>` + convertToRupiah(response.sub_total) + `</td>
                     </tr>
                     <tr>
                         <th>Sub Total Pengiriman</th>
-                        <td>`+convertToRupiah(response.sub_total_pengiriman)+`</td>
+                        <td>` + convertToRupiah(response.sub_total_pengiriman) + `</td>
                     </tr>
                     <tr>
                         <th>Total Pengiriman</th>
-                        <td>`+convertToRupiah(response.total_pembayaran)+`</td>
+                        <td>` + convertToRupiah(response.total_pembayaran) + `</td>
                     </tr>
                     <tr>
                         <th>Berat Produk</th>
@@ -463,7 +463,7 @@
                     </tr>
                     <tr>
                         <th>Bukti Pembayaran</th>
-                        <td>` + (response.bukti_order ? `<img style="width: 100%;" src='/img/user/${response.bukti_order}'>` : 'Belum Upload Gambar') + `</td>
+                        <td>` + (response.bukti_order ? `<img style="width: 100%;" src='/img/bukti/${response.bukti_order}'>` : 'Belum Upload Gambar') + `</td>
                     </tr>
                 </table>
               `
@@ -472,12 +472,46 @@
     });
 
     function convertToRupiah(angka) {
-    var rupiah = '';
-    var angkarev = angka.toString().split('').reverse().join('');
-    for (var i = 0; i < angkarev.length; i++)
-      if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
-    return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+      var rupiah = '';
+      var angkarev = angka.toString().split('').reverse().join('');
+      for (var i = 0; i < angkarev.length; i++)
+        if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+      return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+    }
   }
+
+  function valid(id_order,validasi){
+    $.ajax({
+      url: '<?php echo base_url($controller . "/sendemail") ?>',
+      type: 'post',
+      data: {
+        id_order : id_order, validasi : validasi
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (response.success === true) {
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: response.messages,
+                showConfirmButton: false,
+                timer: 1500
+              }).then(function() {
+                $('#data_table').DataTable().ajax.reload(null, false).draw(false);
+              })
+            } else {
+              Swal.fire({
+                toast: false,
+                position: 'bottom-end',
+                icon: 'error',
+                title: response.messages,
+                showConfirmButton: false,
+                timer: 3000
+              })
+            }
+      }
+    });
   }
 </script>
 
