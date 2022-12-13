@@ -102,13 +102,10 @@ class OrderApi extends BaseController
         $fields['sub_total_pengiriman'] = $this->request->getPostGet('sub_total_pengiriman');
         $fields['total_pembayaran'] = $this->request->getPostGet('total_pembayaran');
         $fields['jns_pengiriman'] = $this->request->getPostGet('jns_pengiriman');
-        $fields['create_at'] = $create;
+        $fields['created_at'] = $create;
 
 
         if ($this->order->insert($fields)) {
-
-            // $this->product->
-
             $id_order = $this->order->insertID();
             $product = $this->product->where('id_product', $id_product)->first();
             $row = [
@@ -138,12 +135,25 @@ class OrderApi extends BaseController
 
         $response = array();
         $id_user_bio = $this->request->getPostGet('id_user_bio');
+        $type = $this->request->getPostGet('type');
 
-        $data = $this->order->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'left')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr','tr.id_rekening = tbl_order.id_rekening','left')->where(['id_user_bio' => $id_user_bio])->findAll();
+        if ($type == 'kirim') {
+            $data = $this->order->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'left')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->join('tbl_pengiriman tpir', 'tpir.id_order = tbl_order.id_order', 'left')->where(['id_user_bio' => $id_user_bio])->findAll();
+        } else {
 
-        $response['success'] = true;
-        $response['messages'] = lang("Berhasil Mendapatkan Data");
-        $response['data'] = $data;
+            $data = $this->order->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'left')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->where(['id_user_bio' => $id_user_bio])->findAll();
+        }
+
+        if ($data) {
+
+            $response['success'] = true;
+            $response['messages'] = lang("Berhasil Mendapatkan Data");
+            $response['data'] = $data;
+        } else {
+            $response['success'] = false;
+            $response['messages'] = lang("Gagal Mendapatkan Data");
+            $response['data'] = $data;
+        }
         return $this->response->setJSON($response);
     }
 
@@ -184,12 +194,13 @@ class OrderApi extends BaseController
         return $this->response->setJSON($response);
     }
 
-    
-    public function upload(){
-        
+
+    public function upload()
+    {
+
         $response = array();
-		$fields['id_order'] = $this->request->getPostGet('id_order');
-		$fields['bukti_order'] = $this->request->getFile('bukti_order');
+        $fields['id_order'] = $this->request->getPostGet('id_order');
+        $fields['bukti_order'] = $this->request->getFile('bukti_order');
 
         // $data = $this->userModel->where('id_user_bio', $fields['id_user_bio'])->first();
 
@@ -208,8 +219,25 @@ class OrderApi extends BaseController
             $response['success'] = false;
             $response['messages'] = "Bukti gagal di upload";
         }
-        
+
         return $this->response->setJSON($response);
     }
 
+    public function updatePesananDiterima()
+    {
+        $response = array();
+        $update = date('Y-m-d H:i:s');
+        $fields['id_order'] = $this->request->getPostGet('id_order');
+        $fields['updated_at'] = $update;
+        $fields['validasi'] = 4;
+        if($this->order->update($fields['id_order'],$fields)){
+            $response['success'] = true;
+            $response['messages'] = "Berhasil Mengupdate Pesanan";
+        } else {
+
+            $response['success'] = false;
+            $response['messages'] = "Gagal Mengupdate Pesanan";
+        }
+        return $this->response->setJSON($response);
+    }
 }

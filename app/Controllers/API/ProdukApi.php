@@ -26,7 +26,7 @@ class ProdukApi extends BaseController
             ->join('tbl_toko tok','tok.id_toko = tbl_product.id_toko','left')
             ->where('tbl_product.id_product', $id_product)->findAll();
         }
-        else if($kategori == '' || $kategori == null){
+        else if($kategori == 'semua' || $kategori == ''){
             $data = $this->produk->findAll();
         }else{
             $data = $this->produk->join('tbl_kategori tk','tk.id_kategori = tbl_product.id_kategori')->like('tk.nama_kategori', $kategori)->findAll();

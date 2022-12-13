@@ -6,12 +6,12 @@
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <div class="col-9 mt-2">
-        <h3 class="card-title">Pengiriman</h3>
+      <div class="col-10 mt-2">
+        <h3 class="card-title">Keranjang</h3>
       </div>
-      <div class="col-3">
-        <button type="button" class="btn float-sm-end btn-success" onclick="save()" title="<?= lang("Tambah Pengiriman") ?>"> <i class="fa fa-plus"></i> <?= lang('Tambah Pengiriman') ?></button>
-      </div>
+      <!-- <div class="col-2">
+        <button type="button" class="btn float-right btn-success" onclick="save()" title="<?= lang("App.new") ?>"> <i class="fa fa-plus"></i> <?= lang('App.new') ?></button>
+      </div> -->
     </div>
   </div>
   <!-- /.card-header -->
@@ -19,14 +19,13 @@
     <table id="data_table" class="table table-bordered table-striped">
       <thead>
         <tr>
-
           <th>No</th>
-          <th>Invoice</th>
-          <th>Layanan</th>
-          <th>No resi</th>
-          <th>Status</th>
-
-          <th></th>
+          <th>Product</th>
+          <th>QTY</th>
+          <th>Harga buku</th>
+          <th>Total harga</th>
+          <th>Kostumer</th>
+          <!-- <th></th> -->
         </tr>
       </thead>
     </table>
@@ -38,7 +37,7 @@
 <!-- /Main content -->
 
 <!-- ADD modal content -->
-<div id="data-modal" class="modal fade" role="dialog" aria-hidden="true">
+<div id="data-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md">
     <div class="modal-content">
       <div class="text-center bg-info p-3" id="model-header">
@@ -47,34 +46,57 @@
       <div class="modal-body">
         <form id="data-form" class="pl-3 pr-3">
           <div class="row">
-            <input type="hidden" id="id_pengiriman" name="id_pengiriman" class="form-control" placeholder="Id pengiriman" maxlength="4" required>
+            <input type="hidden" id="id_cart" name="id_cart" class="form-control" placeholder="Id cart" maxlength="6" required>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="invoice" class="col-form-label"> Invoice: </label>
-                <select class="form-control select2" name="invoice" id="invoice" onchange="get_layanan(this.value)">
-                </select>
+                <label for="id_product" class="col-form-label"> Id product: <span class="text-danger">*</span> </label>
+                <input type="number" id="id_product" name="id_product" class="form-control" placeholder="Id product" minlength="0" maxlength="6" required>
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="layanan" class="col-form-label"> Layanan: <span class="text-danger">*</span> </label>
-                <input type="text" id="layanan" name="layanan" class="form-control" placeholder="Layanan" minlength="0" maxlength="100" required>
+                <label for="qty" class="col-form-label"> Qty: </label>
+                <input type="number" id="qty" name="qty" class="form-control" placeholder="Qty" minlength="0" maxlength="6">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group mb-3">
-                <label for="no_resi" class="col-form-label"> No resi: <span class="text-danger">*</span> </label>
-                <input type="text" id="no_resi" name="no_resi" class="form-control" placeholder="No resi" minlength="0" maxlength="25" required>
+                <label for="harga_buku" class="col-form-label"> Harga buku: </label>
+                <input type="text" id="harga_buku" name="harga_buku" class="form-control" placeholder="Harga buku" minlength="0" maxlength="10">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="total_harga" class="col-form-label"> Total harga: </label>
+                <input type="text" id="total_harga" name="total_harga" class="form-control" placeholder="Total harga" minlength="0" maxlength="10">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="id_user_bio" class="col-form-label"> Id user bio: <span class="text-danger">*</span> </label>
+                <input type="number" id="id_user_bio" name="id_user_bio" class="form-control" placeholder="Id user bio" minlength="0" maxlength="6" required>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="created_at" class="col-form-label"> Created at: </label>
+                <input type="date" id="created_at" name="created_at" class="form-control" dateISO="true">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="updated_at" class="col-form-label"> Updated at: </label>
+                <input type="date" id="updated_at" name="updated_at" class="form-control" dateISO="true">
               </div>
             </div>
           </div>
 
           <div class="form-group text-center">
             <div class="btn-group">
-              <button type="submit" class="btn btn-success mr-2" id="form-btn"><?= lang("Simpan") ?></button>
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><?= lang("Batal") ?></button>
+              <button type="submit" class="btn btn-success mr-2" id="form-btn"><?= lang("App.save") ?></button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><?= lang("App.cancel") ?></button>
             </div>
           </div>
         </form>
@@ -88,6 +110,7 @@
 
 <?= $this->endSection() ?>
 <!-- /.content -->
+
 
 <!-- page script -->
 <?= $this->section("pageScript") ?>
@@ -112,17 +135,6 @@
         async: "true"
       }
     });
-
-    $(".select2").select2({
-      placeholder: "Pilih Invoice",
-      allowClear: true,
-      dropdownParent: $("#data-modal")
-    });
-    $(".select2bs4").select2({
-      theme: "bootstrap4",
-    });
-    show_invoice();
-
   });
 
   var urlController = '';
@@ -136,37 +148,39 @@
     return submitText;
   }
 
-  function save(id_pengiriman) {
+  function save(id_cart) {
     // reset the form 
     $("#data-form")[0].reset();
     $(".form-control").removeClass('is-invalid').removeClass('is-valid');
-    if (typeof id_pengiriman === 'undefined' || id_pengiriman < 1) { //add
+    if (typeof id_cart === 'undefined' || id_cart < 1) { //add
       urlController = '<?= base_url($controller . "/add") ?>';
-      submitText = '<?= lang("Simpan") ?>';
+      submitText = '<?= lang("App.save") ?>';
       $('#model-header').removeClass('bg-info').addClass('bg-success');
-      $("#info-header-modalLabel").text('<?= lang("Input Data Pengiriman") ?>');
+      $("#info-header-modalLabel").text('<?= lang("App.add") ?>');
       $("#form-btn").text(submitText);
       $('#data-modal').modal('show');
     } else { //edit
       urlController = '<?= base_url($controller . "/edit") ?>';
-      submitText = '<?= lang("Ubah") ?>';
+      submitText = '<?= lang("App.update") ?>';
       $.ajax({
         url: '<?php echo base_url($controller . "/getOne") ?>',
         type: 'post',
         data: {
-          id_pengiriman: id_pengiriman
+          id_cart: id_cart
         },
         dataType: 'json',
         success: function(response) {
           $('#model-header').removeClass('bg-success').addClass('bg-info');
-          $("#info-header-modalLabel").text('<?= lang("Ubah Data Pengiriman") ?>');
+          $("#info-header-modalLabel").text('<?= lang("App.edit") ?>');
           $("#form-btn").text(submitText);
           $('#data-modal').modal('show');
           //insert data to form
-          $("#data-form #id_pengiriman").val(response.id_pengiriman);
-          $("#data-form #id_order").val(response.id_order);
-          $("#data-form #layanan").val(response.layanan);
-          $("#data-form #no_resi").val(response.no_resi);
+          $("#data-form #id_cart").val(response.id_cart);
+          $("#data-form #id_product").val(response.id_product);
+          $("#data-form #qty").val(response.qty);
+          $("#data-form #harga_buku").val(response.harga_buku);
+          $("#data-form #total_harga").val(response.total_harga);
+          $("#data-form #id_user_bio").val(response.id_user_bio);
           $("#data-form #created_at").val(response.created_at);
           $("#data-form #updated_at").val(response.updated_at);
 
@@ -259,16 +273,18 @@
     });
   }
 
-  function remove(id_pengiriman) {
+
+
+  function remove(id_cart) {
     Swal.fire({
-      title: "<?= lang("Hapus ?") ?>",
-      text: "<?= lang("Hapus Data Pengiriman") ?>",
+      title: "<?= lang("App.remove-title") ?>",
+      text: "<?= lang("App.remove-text") ?>",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: '<?= lang("Hapus") ?>',
-      cancelButtonText: '<?= lang("Batal") ?>'
+      confirmButtonText: '<?= lang("App.confirm") ?>',
+      cancelButtonText: '<?= lang("App.cancel") ?>'
     }).then((result) => {
 
       if (result.value) {
@@ -276,7 +292,7 @@
           url: '<?php echo base_url($controller . "/remove") ?>',
           type: 'post',
           data: {
-            id_pengiriman: id_pengiriman
+            id_cart: id_cart
           },
           dataType: 'json',
           success: function(response) {
@@ -306,44 +322,6 @@
         });
       }
     })
-  }
-
-  function show_invoice() {
-    $.ajax({
-      url: '<?php echo base_url($controller . "/getinvoice") ?>',
-      type: 'GET',
-      dataType: 'json',
-      success: function(response) {
-        if (response.success) {
-
-          $("#invoice").html('<option value="">Pilih Invoice</option>');
-
-          $.each(response.result, function(k, v) {
-            $("#invoice").append(
-              `<option value="${v.id_order}">${v.invoice}</option>`
-            );
-          });
-        }
-      },
-      cache: true,
-    });
-  }
-
-  function get_layanan(id_order) {
-    $.ajax({
-      url: '<?php echo base_url($controller . "/getinvoice") ?>',
-      type: 'POST',
-      data: {
-        id_order : id_order
-      },
-      dataType: 'json',
-      success: function(response) {
-        if (response.success) {
-          $("#layanan").val(response.result[0].jns_pengiriman);
-      }
-      },
-      cache: true,
-    });
   }
 </script>
 
