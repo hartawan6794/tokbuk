@@ -41,7 +41,7 @@ class Pengiriman extends BaseController
 
 		$result = $this->pengirimanModel->select()->join('tbl_order to', 'to.id_order = tbl_pengiriman.id_order', 'left')->findAll();
 
-		$no = 0;
+		$no = 1;
 		foreach ($result as $key => $value) {
 
 			$ops = '<div class="btn-group">';
@@ -51,7 +51,7 @@ class Pengiriman extends BaseController
 			// $ops .= '<a class="dropdown-item text-info" onClick="save(' . $value->id_pengiriman . ')"><i class="fa-solid fa-pen-to-square"></i>   ' .  lang("App.edit")  . '</a>';
 			// $ops .= '<a class="dropdown-item text-orange" ><i class="fa-solid fa-copy"></i>   ' .  lang("App.copy")  . '</a>';
 			// $ops .= '<div class="dropdown-divider"></div>';
-			$ops .= '<a class="dropdown-item text-danger" onClick="remove(' . $value->id_pengiriman . ')"><i class="fa-solid fa-trash"></i>   ' .  lang("App.delete")  . '</a>';
+			$ops .= '<a class="dropdown-item text-danger" onClick="remove(' . $value->id_pengiriman . ')"><i class="fa-solid fa-trash"></i>   Hapus</a>';
 			$ops .= '</div></div>';
 
 			$data['data'][$key] = array(
@@ -59,6 +59,7 @@ class Pengiriman extends BaseController
 				$value->invoice,
 				$value->layanan,
 				$value->no_resi,
+				$value->validasi == 3 ? 'Pesanan Sedang Dikirim' :($value->validasi == 4 ? 'Pesanan Telah Diterima':''),
 
 				$ops
 			);
