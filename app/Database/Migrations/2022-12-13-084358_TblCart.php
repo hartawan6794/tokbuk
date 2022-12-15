@@ -25,10 +25,6 @@ class TblCart extends Migration
                 'type' => 'DECIMAL',
                 'null' => true
             ],
-            'total_harga' => [
-                'type' => 'DECIMAL',
-                'null' => true
-            ],
             'id_user_bio' => [
                 'type' => 'SMALLINT',
             ],
