@@ -88,7 +88,7 @@
                   <i class="nav-icon fa fa-cart-shopping"></i>
                   <p class="text">Keranjang</p>
                 </a>
-              </li>
+            </li>
               <li class="nav-item">
                 <a href="<?= base_url('order') ?>" class="nav-link <?= $seg == 'order' ? 'active' : '' ?>">
                   <i class="nav-icon fa fa-bag-shopping"></i>
