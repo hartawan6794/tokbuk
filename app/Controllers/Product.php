@@ -40,7 +40,11 @@ class Product extends BaseController
 		];
 		// var_dump($data);die;
 
-		return view('product', $data);
+		if(session()->get('isLogin')){
+			return view('product', $data);
+		}else{
+			return view('login');
+		}
 	}
 
 	public function getAll()

@@ -50,7 +50,6 @@ class ProdukApi extends BaseController
         $response['messages'] = "Data berhasil diubah";
         $response['data'] = $data;
         return $this->response->setJSON($response);
-        
     }
 
     public function getRekening()

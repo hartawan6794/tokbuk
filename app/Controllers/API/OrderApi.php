@@ -3,6 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
+use App\Models\KeranjangModel;
 use App\Models\OrderDetailModel;
 use App\Models\OrderModel;
 use App\Models\ProductModel;
@@ -16,6 +17,7 @@ class OrderApi extends BaseController
         $this->order = new OrderModel();
         $this->orderDetail = new OrderDetailModel();
         $this->product = new ProductModel();
+        $this->cart = new KeranjangModel();
     }
 
     public function index()
@@ -91,6 +93,7 @@ class OrderApi extends BaseController
     {
         $response = array();
         $create = date('Y-m-d');
+        $type = $this->request->getPostGet('type');
         $id_product = $this->request->getPostGet('id_product');
         $qty = $this->request->getPostGet('stok');
         $fields['id_order'] = $this->request->getPostGet('id_order');
@@ -104,27 +107,58 @@ class OrderApi extends BaseController
         $fields['jns_pengiriman'] = $this->request->getPostGet('jns_pengiriman');
         $fields['created_at'] = $create;
 
+        if ($type == 'cart') {
+            if ($this->order->insert($fields)) {
+                $id_order = $this->order->insertID();
+                $carts = $this->cart->where('id_user_bio', $fields['id_user_bio'])->findAll();
 
-        if ($this->order->insert($fields)) {
-            $id_order = $this->order->insertID();
-            $product = $this->product->where('id_product', $id_product)->first();
-            $row = [
-                'id_order' => $id_order,
-                'id_product' => $id_product,
-                'harga_product' => $product->harga_buku,
-                'qty' => $qty,
-                'total' => $fields['sub_total']
-            ];
-            $this->orderDetail->insert($row);
-            $response['success'] = true;
-            $response['messages'] = lang("Berhasil Menambahkan Data");
-            $response['data'] = [
-                'invoice' => $fields['invoice']
-            ];
+                $row = [];
+                foreach ($carts as $cart) {
+                    array_push($row, array(
+                        'id_order' => $id_order,
+                        'id_product' => $cart->id_product,
+                        'harga_product' => $cart->harga_buku,
+                        'qty' => $cart->qty,
+                        'total' => $cart->harga_buku * $cart->qty
+                    ));
+                }
+
+                if ($this->orderDetail->insertBatch($row)) {
+                    $this->cart->where('id_user_bio', $fields['id_user_bio'])->delete();
+                    $response['success'] = true;
+                    $response['messages'] = lang("Berhasil Menambahkan Data");
+                    $response['data'] = [
+                        'invoice' => $fields['invoice']
+                    ];
+                }
+            } else {
+
+                $response['success'] = false;
+                $response['messages'] = lang("Gagal Menambahkan Data");
+            }
         } else {
 
-            $response['success'] = false;
-            $response['messages'] = lang("Gagal Menambahkan Data");
+            if ($this->order->insert($fields)) {
+                $id_order = $this->order->insertID();
+                $product = $this->product->where('id_product', $id_product)->first();
+                $row = [
+                    'id_order' => $id_order,
+                    'id_product' => $id_product,
+                    'harga_product' => $product->harga_buku,
+                    'qty' => $qty,
+                    'total' => $fields['sub_total']
+                ];
+                $this->orderDetail->insert($row);
+                $response['success'] = true;
+                $response['messages'] = lang("Berhasil Menambahkan Data");
+                $response['data'] = [
+                    'invoice' => $fields['invoice']
+                ];
+            } else {
+
+                $response['success'] = false;
+                $response['messages'] = lang("Gagal Menambahkan Data");
+            }
         }
 
         return $this->response->setJSON($response);
@@ -140,8 +174,7 @@ class OrderApi extends BaseController
         if ($type == 'kirim') {
             $data = $this->order->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'left')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->join('tbl_pengiriman tpir', 'tpir.id_order = tbl_order.id_order', 'left')->where(['id_user_bio' => $id_user_bio])->findAll();
         } else {
-
-            $data = $this->order->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'left')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->where(['id_user_bio' => $id_user_bio])->findAll();
+            $data = $this->order->distinct()->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'right')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->where(['id_user_bio' => $id_user_bio])->groupBy('tbl_order.id_order')->findAll();
         }
 
         if ($data) {
@@ -157,13 +190,13 @@ class OrderApi extends BaseController
         return $this->response->setJSON($response);
     }
 
-    public function getPemesananOne()
+    public function getPemesananDetail()
     {
 
         $response = array();
 
         $id_order = $this->request->getPostGet('id_order');
-        $data = $this->order->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'left')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_toko tt', 'tp.id_toko = tt.id_toko', 'left')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr', 'tbl_order.id_rekening = tr.id_rekening', 'left')->where(['tbl_order.id_order' => $id_order])->findAll();
+        $data = $this->order->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order', 'right')->join('tbl_product tp', 'tod.id_product = tp.id_product')->join('tbl_toko tt', 'tp.id_toko = tt.id_toko', 'left')->join('tbl_kategori tk', 'tp.id_kategori = tk.id_kategori', 'left')->join('tbl_rekening tr', 'tbl_order.id_rekening = tr.id_rekening', 'left')->where(['tbl_order.id_order' => $id_order])->findAll();
 
         $response['success'] = true;
         $response['messages'] = lang("Berhasil Mendapatkan Data");
@@ -177,14 +210,13 @@ class OrderApi extends BaseController
         $response = array();
         $id_order = $this->request->getPostGet('id_order');
         if ($id_order != null) {
-            $qty = $this->orderDetail->join('tbl_product tp', 'tp.id_product = tbl_order_detail.id_product', 'left')->where('id_order', $id_order)->first();
-            $oldStok = $qty->stok + $qty->qty;
-            if ($this->product->set('stok', $oldStok)->where('id_product', $qty->id_product)->update()) {
-                if ($this->order->where('id_order', $id_order)->delete()) {
-                    $this->orderDetail->where('id_order', $id_order)->delete();
-                    $response['success'] = true;
-                    $response['messages'] = lang("Berhasil Menambahkan Data");
-                }
+            // $qty = $this->orderDetail->join('tbl_product tp', 'tp.id_product = tbl_order_detail.id_product', 'left')->where('id_order', $id_order)->first();
+            // $oldStok = $qty->stok + $qty->qty;
+            // if ($this->product->set('stok', $oldStok)->where('id_product', $qty->id_product)->update()) {
+            if ($this->order->where('id_order', $id_order)->delete()) {
+                // $this->orderDetail->where('id_order', $id_order)->delete();
+                $response['success'] = true;
+                $response['messages'] = lang("Berhasil Menambahkan Data");
             } else {
                 $response['success'] = false;
                 $response['messages'] = lang("Gagal Menambahkan Data");
@@ -230,7 +262,7 @@ class OrderApi extends BaseController
         $fields['id_order'] = $this->request->getPostGet('id_order');
         $fields['updated_at'] = $update;
         $fields['validasi'] = 4;
-        if($this->order->update($fields['id_order'],$fields)){
+        if ($this->order->update($fields['id_order'], $fields)) {
             $response['success'] = true;
             $response['messages'] = "Berhasil Mengupdate Pesanan";
         } else {

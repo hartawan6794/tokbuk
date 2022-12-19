@@ -40,7 +40,7 @@ class TblOrderDetail extends Migration
 
         $this->forge->addField($fields);
         $this->forge->addPrimaryKey('id_order_detail');
-        $this->forge->addForeignKey('id_order','tbl_order','id_order','CASCADE','CASCADE');
+        // $this->forge->addForeignKey('id_order','tbl_order','id_order','CASCADE','NO ACTION');
         $this->forge->addForeignKey('id_product','tbl_product','id_product','CASCADE','CASCADE');
         $attributes = ['ENGINE' => 'InnoDB'];
         $this->forge->createTable('tbl_order_detail', false, $attributes);
