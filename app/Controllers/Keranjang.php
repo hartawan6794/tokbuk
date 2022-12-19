@@ -28,14 +28,18 @@ class Keranjang extends BaseController
 			'title'     		=> 'Menu Keranjang'
 		];
 
-		return view('keranjang', $data);
+		if (session()->get('isLogin')) {
+			return view('keranjang', $data);
+		}else{
+			return view('login');
+		}
 	}
 
 	public function getAll()
 	{
 		$response = $data['data'] = array();
 
-		$result = $this->keranjangModel->select()->join('tbl_product tp','tp.id_product = tbl_cart.id_product','left')->join('tbl_user_biodata tub','tub.id_user_bio = tbl_cart.id_user_bio','')->findAll();
+		$result = $this->keranjangModel->select()->join('tbl_product tp', 'tp.id_product = tbl_cart.id_product', 'left')->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_cart.id_user_bio', '')->findAll();
 
 		$no = 1;
 		foreach ($result as $key => $value) {
@@ -55,7 +59,7 @@ class Keranjang extends BaseController
 				$value->judul_buku,
 				$value->qty,
 				$value->harga_buku,
-				rupiah($value->qty*$value->harga_buku),
+				rupiah($value->qty * $value->harga_buku),
 				$value->nm_user,
 
 				// $ops

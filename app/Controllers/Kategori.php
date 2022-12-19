@@ -27,7 +27,11 @@ class Kategori extends BaseController
 			'title'     		=> 'Kategori'
 		];
 
-		return view('kategori', $data);
+		if (session()->get('isLogin')) {
+			return view('kategori', $data);
+		}else{
+			return view('login');
+		}
 	}
 
 	public function getAll()

@@ -27,7 +27,11 @@ class Rekening extends BaseController
 			'title'     		=> 'rekening'
 		];
 
-		return view('rekening', $data);
+		if (session()->get('isLogin')) {
+			return view('rekening', $data);
+		}else{
+			return view('login');
+		}
 	}
 
 	public function getAll()

@@ -41,7 +41,11 @@ class AlamatKirim extends BaseController
 		];
 
 		// var_dump($data);
-		return view('alamatKirim', $data);
+		if (session()->get('isLogin')) {
+			return view('alamatKirim', $data);
+		} else {
+			return view('login');
+		}
 	}
 
 	public function getAll()
@@ -103,8 +107,8 @@ class AlamatKirim extends BaseController
 		$response = array();
 		$create = date('Y-m-d H:i:s');
 
-		$prov = explode("-",$this->request->getPost('provinsi'));
-		$kab = explode("-",$this->request->getPost('kabupaten'));
+		$prov = explode("-", $this->request->getPost('provinsi'));
+		$kab = explode("-", $this->request->getPost('kabupaten'));
 
 
 		$fields['id_alamat'] = $this->request->getPost('id_alamat');
@@ -161,10 +165,10 @@ class AlamatKirim extends BaseController
 
 		$create = date('Y-m-d H:i:s');
 
-		$prov = explode("-",$this->request->getPost('provinsi'));
+		$prov = explode("-", $this->request->getPost('provinsi'));
 		$kabData = $this->request->getPost('kabupaten');
-		if($kabData != null  || $kabData != ''){
-			$kab = explode("-",$kabData);
+		if ($kabData != null  || $kabData != '') {
+			$kab = explode("-", $kabData);
 			$fields['id_kabupaten'] = $kab[0];
 			$fields['kabupaten'] = $kab[1];
 		}
@@ -179,7 +183,7 @@ class AlamatKirim extends BaseController
 		$fields['kelurahan'] = $this->request->getPost('kelurahan');
 		$fields['alamat_rumah'] = $this->request->getPost('alamat_rumah');
 		$fields['postalcode'] = $this->request->getPost('postalcode');
-		$fields['updated_at'] =$create;
+		$fields['updated_at'] = $create;
 
 
 		$this->validation->setRules([
@@ -280,7 +284,7 @@ class AlamatKirim extends BaseController
 
 		return  $this->response->setJSON($provData);
 	}
-	
+
 	function getapiprov($url = null, $key = null, $provinsi_id = null)
 	{
 		$curl = curl_init();

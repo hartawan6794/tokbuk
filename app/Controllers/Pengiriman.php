@@ -32,7 +32,11 @@ class Pengiriman extends BaseController
 			'title'     		=> 'Menu Pengiriman'
 		];
 
-		return view('pengiriman', $data);
+		if (session()->get('isLogin')) {
+			return view('pengiriman', $data);
+		}else{
+			return view('login');
+		}
 	}
 
 	public function getAll()
@@ -59,7 +63,7 @@ class Pengiriman extends BaseController
 				$value->invoice,
 				$value->layanan,
 				$value->no_resi,
-				$value->validasi == 3 ? 'Pesanan Sedang Dikirim' :($value->validasi == 4 ? 'Pesanan Telah Diterima':''),
+				$value->validasi == 3 ? 'Pesanan Sedang Dikirim' : ($value->validasi == 4 ? 'Pesanan Telah Diterima' : ''),
 
 				$ops
 			);
@@ -198,7 +202,7 @@ class Pengiriman extends BaseController
 		if ($id_order) {
 			$data = $this->order->select('jns_pengiriman')->where('id_order', $id_order)->findAll();
 		} else {
-			$data = $this->order->select('id_order,invoice')->where('validasi',2)->findAll();
+			$data = $this->order->select('id_order,invoice')->where('validasi', 2)->findAll();
 		}
 		$data['result'] = $data;
 		$data['success'] = true;
