@@ -19,6 +19,8 @@
 
 <script src="<?= base_url() ?>/asset/plugins/select2/js/select2.full.min.js"></script>
 
+<!-- cart table -->
+<sctipt src="<?= base_url("asset/js/Chart.min.js")?>"></sctipt>
 
 
 <!-- DataTables Full Function -->
