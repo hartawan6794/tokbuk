@@ -40,9 +40,9 @@ class Product extends BaseController
 		];
 		// var_dump($data);die;
 
-		if(session()->get('isLogin')){
+		if (session()->get('isLogin')) {
 			return view('product', $data);
-		}else{
+		} else {
 			return view('login');
 		}
 	}
@@ -50,8 +50,12 @@ class Product extends BaseController
 	public function getAll()
 	{
 		$response = $data['data'] = array();
-
-		$result = $this->productModel->select()->findAll();
+		if (session()->get('username') == 'admin') {
+			$result = $this->productModel->select()->findAll();
+		} else {
+			$result = $this->productModel->select()->join('tbl_toko tt', 'tt.id_toko = tbl_product.id_toko', 'inner')->join('tbl_user_biodata tub', 'tub.id_user_bio = tt.id_user_bio', 'inner')->where('tub.id_user_bio', session()->get('id_user_bio'))->findAll();
+		}
+		$result = $this->productModel->select()->join('tbl_toko tt', 'tt.id_toko = tbl_product.id_toko', 'inner')->join('tbl_user_biodata tub', 'tub.id_user_bio = tt.id_user_bio', 'inner')->where('tub.id_user_bio', session()->get('id_user_bio'))->findAll();
 		$i = 1;
 
 		foreach ($result as $key => $value) {
@@ -120,7 +124,7 @@ class Product extends BaseController
 		$fields['stok'] = $this->request->getPost('stok');
 		$fields['baret_produk'] = $this->request->getPost('berat');
 		$fields['harga_buku'] = $this->request->getPost('harga_buku');
-		// $fields['created_at'] = $created;
+		$fields['created_at'] = $created;
 		$img = [
 			$this->request->getFile('imgproduct1'),
 			$this->request->getFile('imgproduct2'),
@@ -141,22 +145,22 @@ class Product extends BaseController
 			'harga_buku' => ['label' => 'Harga buku', 'rules' => 'permit_empty|min_length[0]|max_length[10]'],
 			'imgproduct1' => [
 				'label' => 'imgproduct1', 'rules' => 'uploaded[imgproduct1]'
-				. '|is_image[imgproduct1]'
-				. '|mime_in[imgproduct1,image/jpg,image/jpeg,image/png,image/webp]'
-				. '|max_size[imgproduct1,512]','errors' => ['max_size' => 'Ukuran file harus di bawah 512Kb','mime_in' => 'Harap Masukan File Berupa Gambar' ,'is_image' => 'Harap Masukan File Berupa Gambar']
+					. '|is_image[imgproduct1]'
+					. '|mime_in[imgproduct1,image/jpg,image/jpeg,image/png,image/webp]'
+					. '|max_size[imgproduct1,512]', 'errors' => ['max_size' => 'Ukuran file harus di bawah 512Kb', 'mime_in' => 'Harap Masukan File Berupa Gambar', 'is_image' => 'Harap Masukan File Berupa Gambar']
 			],
-			'imgproduct2' => [
-				'label' => 'imgproduct2', 'rules' => 'uploaded[imgproduct2]'
-				. '|is_image[imgproduct2]'
-				. '|mime_in[imgproduct2,image/jpg,image/jpeg,image/png,image/webp]'
-				. '|max_size[imgproduct2,512]','errors' => ['max_size' => 'Ukuran file harus di bawah 512Kb','mime_in' => 'Harap Masukan File Berupa Gambar' ,'is_image' => 'Harap Masukan File Berupa Gambar']
-			],
-			'imgproduct3' => [
-				'label' => 'imgproduct3', 'rules' => 'uploaded[imgproduct3]'
-				. '|is_image[imgproduct3]'
-				. '|mime_in[imgproduct3,image/jpg,image/jpeg,image/png,image/webp]'
-				. '|max_size[imgproduct3,512]','errors' => ['max_size' => 'Ukuran file harus di bawah 512Kb','mime_in' => 'Harap Masukan File Berupa Gambar' ,'is_image' => 'Harap Masukan File Berupa Gambar']
-			]
+			// 'imgproduct2' => [
+			// 	'label' => 'imgproduct2', 'rules' => 'uploaded[imgproduct2]'
+			// 		. '|is_image[imgproduct2]'
+			// 		. '|mime_in[imgproduct2,image/jpg,image/jpeg,image/png,image/webp]'
+			// 		. '|max_size[imgproduct2,512]', 'errors' => ['max_size' => 'Ukuran file harus di bawah 512Kb', 'mime_in' => 'Harap Masukan File Berupa Gambar', 'is_image' => 'Harap Masukan File Berupa Gambar']
+			// ],
+			// 'imgproduct3' => [
+			// 	'label' => 'imgproduct3', 'rules' => 'uploaded[imgproduct3]'
+			// 		. '|is_image[imgproduct3]'
+			// 		. '|mime_in[imgproduct3,image/jpg,image/jpeg,image/png,image/webp]'
+			// 		. '|max_size[imgproduct3,512]', 'errors' => ['max_size' => 'Ukuran file harus di bawah 512Kb', 'mime_in' => 'Harap Masukan File Berupa Gambar', 'is_image' => 'Harap Masukan File Berupa Gambar']
+			// ]
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {
@@ -196,7 +200,7 @@ class Product extends BaseController
 	public function edit()
 	{
 		$response = array();
-
+		$update = date('Y-m-d H:i:s');
 		$fields['id_product'] = $this->request->getPost('id_product');
 		$fields['id_toko'] = $this->request->getPost('id_toko');
 		$fields['judul_buku'] = $this->request->getPost('judul_buku');
@@ -209,6 +213,7 @@ class Product extends BaseController
 		$fields['stok'] = $this->request->getPost('stok');
 		$fields['baret_produk'] = $this->request->getPost('berat');
 		$fields['harga_buku'] = $this->request->getPost('harga_buku');
+		$fields['updated_at'] = $update;
 		$img = [
 			$this->request->getFile('imgproduct1'),
 			$this->request->getFile('imgproduct2'),
