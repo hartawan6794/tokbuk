@@ -80,7 +80,7 @@ class CartApi extends BaseController
     {
         $response = array();
         $id_user_bio = $this->request->getPostGet('id_user_bio');
-        $count = $this->cart->where('id_user_bio', $id_user_bio)->countAll();
+        $count = $this->cart->where('id_user_bio', $id_user_bio)->countAllResults();
         if ($count) {
             $response['success'] = true;
             $response['messages'] = "Berhasil mendapatkan data";

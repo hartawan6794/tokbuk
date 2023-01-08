@@ -10,7 +10,7 @@
         <h3 class="card-title">Product</h3>
       </div>
       <div class="col-3">
-        <button type="button" class="btn float-right btn-success" onclick="save()" title="Tambah Produk"> <i class="fa fa-plus"></i> Tambah Produk</button>
+        <button type="button" class="btn float-end btn-success" onclick="save()" title="Tambah Produk"> <i class="fa fa-plus"></i> Tambah Produk</button>
       </div>
     </div>
   </div>

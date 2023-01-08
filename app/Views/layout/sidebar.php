@@ -47,17 +47,17 @@
                     </li>
                   </ul>
                 </li>
-              <?php endif; ?>
               <li class="nav-item">
                 <a href="<?= base_url('toko') ?>" class="nav-link <?= $seg == 'toko' ? 'active' : '' ?>">
                   <i class="nav-icon fa fa-store"></i>
                   <p class="text">Toko</p>
                 </a>
               </li>
+              <?php endif; ?>
               <li class="nav-item">
                 <a href="<?= base_url('alamatkirim') ?>" class="nav-link <?= $seg == 'alamatkirim' ? 'active' : '' ?>">
                   <i class="nav-icon fa fa-map-location-dot"></i>
-                  <p class="text">Alamat Toko</p>
+                  <p class="text">Alamat</p>
                 </a>
               </li>
               <li class="nav-item <?= $seg == 'product' || $seg == 'kategori' ? 'menu-open menu-is-open' : '' ?>">
@@ -101,11 +101,19 @@
                   <p class="text">Pengiriman</p>
                 </a>
               </li>
+              <?php if (session()->get('username') == 'admin') : ?>
               
               <li class="nav-item">
                 <a href="<?= base_url('rekening') ?>" class="nav-link <?= $seg == 'rekening' ? 'active' : '' ?>">
                   <i class="nav-icon fa fa-credit-card"></i>
                   <p class="text">Referensi Rekening</p>
+                </a>
+              </li>
+              <?php endif;?>
+              <li class="nav-item">
+                <a href="<?= base_url('report') ?>" class="nav-link <?= $seg == 'report' ? 'active' : '' ?>">
+                  <i class="nav-icon fa fa-print"></i>
+                  <p class="text">Laporan</p>
                 </a>
               </li>
 
