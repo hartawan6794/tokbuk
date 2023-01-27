@@ -116,7 +116,7 @@ class Order extends BaseController
 		$fields['sub_total_pengiriman'] = $this->request->getPost('sub_total_pengiriman');
 		$fields['total_pembayaran'] = $this->request->getPost('total_pembayaran');
 		$fields['validasi'] = $this->request->getPost('validasi');
-		$fields['created_at'] = $this->request->getPost('created_at');
+		$fields['created_at'] = date('Y-m-d H:i:s');
 		$fields['updated_at'] = $this->request->getPost('updated_at');
 
 
@@ -266,17 +266,17 @@ class Order extends BaseController
 
 		// try {
 		//Server settings
-		// $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+		$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
 		$mail->isSMTP();
 		$mail->Host = "smtp.gmail.com";                   //Set the SMTP server to send through
 		$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-		$mail->Username = "julihartawan06@gmail.com";
-		$mail->Password = "wrwifaxbfpuqatnc";                          //SMTP password
+		$mail->Username = "dafapratama231299@gmail.com";
+		$mail->Password = "zmwulpmcdncyukdg";                         //SMTP password
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
 		$mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
 		//Recipients
-		$mail->setFrom("julihartawan06@gmail.com", "Toko Buku");
+		$mail->setFrom("dafapratama231299@gmail.com", "Toko Buku");
 		$mail->addAddress($dataOrder->email_user, $dataOrder->nm_user);
 		$mail->isHTML(true);
 		//Content

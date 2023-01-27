@@ -1,7 +1,12 @@
 <?= $this->extend('layout/master') ?>
 
 <?= $this->section('content') ?>
-
+<?php $session = session();
+// var_dump($session->get('error'));
+// helper('settings');
+$error = $session->get('error');
+// var_dump($error);die;
+?>
 <section class="content">
     <div class="card">
         <div class="card-header with-border">
@@ -25,6 +30,9 @@
                                 <div class="sm-9">
                                     <input type="date" name="date1" value="" class="form-control">
                                 </div>
+                                <?php if($error) :?>
+                                <p class="sm-3 text-danger control-label"><?= $error->hasError('awal') ? $error->getError('awal') : $error->getError('akhir')  ?></p>
+                                <?php endif;?>
                             </div>
                         </div>
                     </div>
@@ -38,19 +46,22 @@
                             </div>
                         </div>
                     </div>
-                    <?php if(session()->get('username') == 'admin') : ?>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="toko">Pilih Toko</label>
-                            <select class="form-control" name="tokok" id="tokok">
-                                <option value="">--Pilih Toko--</option>
-                            </select>
+                    <?php if (session()->get('username') == 'admin') : ?>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="toko">Pilih Toko</label>
+                                <select class="form-control" name="toko" id="toko">
+                                    <option value="">--Pilih Toko--</option>
+                                    <?php foreach ($toko as $value) : ?>
+                                        <option value="<?= $value->id_toko ?>"><?= $value->nm_toko ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <?php endif;?>
+                    <?php endif; ?>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <button type="submit" name="reset" class="btn btn-flat form-control">Reset</button>
+                            <button type="reset" name="reset" class="btn btn-flat form-control">Reset</button>
                             <button type="submit" name="cetak" class="btn btn-info btn-flat form-control">
                                 <i class="fas fa-print"></i> Cetak
                             </button>
