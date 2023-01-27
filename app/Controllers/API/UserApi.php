@@ -111,7 +111,7 @@ class UserApi extends BaseController
             'tanggal_lahir' => $fields['tanggal_lahir'],
             'tempat_lahir' => $fields['tempat_lahir'],
             'telpon' => $fields['telpon'],
-            'alamat' => $fields['alamat'],
+            'alamat' => "-",
             'created_at' => $create
         );
 
@@ -121,7 +121,7 @@ class UserApi extends BaseController
             'email_user' => $fields['email_user'],
             'status' => 10,
             'password' => md5($fields['pass']),
-            'role' => $fields['role'],
+            'role' => 1,
             'created_at' => $create
         );
 

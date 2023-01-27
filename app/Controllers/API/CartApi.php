@@ -23,7 +23,7 @@ class CartApi extends BaseController
         $data = $this->cart->select()->join('tbl_product tp', 'tp.id_product = tbl_cart.id_product', 'left')->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_cart.id_user_bio', '')->join('tbl_kategori tk', 'tk.id_kategori = tp.id_kategori', 'left')->findAll();
         if ($data) {
             $response['success'] = true;
-            $response['messages'] = "Data berhasil diubah";
+            $response['messages'] = "Data berhasil ditemukan";
             $response['data'] = $data;
         } else {
             $response['success'] = false;
@@ -51,14 +51,12 @@ class CartApi extends BaseController
 
 
         if ($query) {
-
             $fields['qty'] += $query[0]->qty;
             $fields['total_harga'] = $fields['qty'] * $fields['harga_buku'];
             if ($this->cart->update($query[0]->id_cart, $fields)) {
                 $response['success'] = true;
                 $response['messages'] = lang("Berhasil Menambahkan Data");
             } else {
-
                 $response['success'] = false;
                 $response['messages'] = lang("Gagal Menambahkan Data");
             }

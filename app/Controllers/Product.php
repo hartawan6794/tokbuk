@@ -55,7 +55,7 @@ class Product extends BaseController
 		} else {
 			$result = $this->productModel->select()->join('tbl_toko tt', 'tt.id_toko = tbl_product.id_toko', 'inner')->join('tbl_user_biodata tub', 'tub.id_user_bio = tt.id_user_bio', 'inner')->where('tub.id_user_bio', session()->get('id_user_bio'))->findAll();
 		}
-		$result = $this->productModel->select()->join('tbl_toko tt', 'tt.id_toko = tbl_product.id_toko', 'inner')->join('tbl_user_biodata tub', 'tub.id_user_bio = tt.id_user_bio', 'inner')->where('tub.id_user_bio', session()->get('id_user_bio'))->findAll();
+		// $result = $this->productModel->select()->join('tbl_toko tt', 'tt.id_toko = tbl_product.id_toko', 'inner')->join('tbl_user_biodata tub', 'tub.id_user_bio = tt.id_user_bio', 'inner')->where('tub.id_user_bio', session()->get('id_user_bio'))->findAll();
 		$i = 1;
 
 		foreach ($result as $key => $value) {

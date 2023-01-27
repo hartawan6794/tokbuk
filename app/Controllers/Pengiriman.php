@@ -212,7 +212,6 @@ class Pengiriman extends BaseController
 	public function sendEmail($id_order)
 	{
 		$dataOrder = $this->order->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->join('tbl_pengiriman tp', 'tp.id_order = tbl_order.id_order', 'left')->where('tbl_order.id_order', $id_order)->first();
-
 		$message        = "Paket Anda Sedang DIkirim
 			Invoice : " . $dataOrder->invoice . "
 			Nomor Reei : " . $dataOrder->no_resi . "
@@ -226,13 +225,13 @@ class Pengiriman extends BaseController
 		$mail->isSMTP();
 		$mail->Host = "smtp.gmail.com";                   //Set the SMTP server to send through
 		$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-		$mail->Username = "julihartawan06@gmail.com";
-		$mail->Password = "wrwifaxbfpuqatnc";                          //SMTP password
+		$mail->Username = "dafapratama231299@gmail.com";
+		$mail->Password = "zmwulpmcdncyukdg";                  //SMTP password
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
 		$mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
 		//Recipients
-		$mail->setFrom("julihartawan06@gmail.com", "Toko Buku");
+		$mail->setFrom("dafapratama231299@gmail.com", "Toko Buku");
 		$mail->addAddress($dataOrder->email_user, $dataOrder->nm_user);
 		$mail->isHTML(true);
 		//Content
