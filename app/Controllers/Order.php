@@ -76,7 +76,7 @@ class Order extends BaseController
 				rupiah($value->total_pembayaran),
 				$value->bukti_order ? '<button class="btn btn-sm btn-success text-default center" onClick="lihat(' . $value->id_order . ')">Lihat Bukti</button>' : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				// $value->validasi == 0 ? ($value->bukti_order ? '':'Belum Upload') : '-',
-				$value->bukti_order ? ($value->validasi == 0 ? $validai : ($value->validasi == '2' ? '<span class="p-1 bg-success"> Pembayaran Diterima</span>' : ($value->validasi == '3' ? '<span class="p-1 bg-danger"> Sedang Mengirim</span>': ($value->validasi == '4' ? '<span class="p-1 bg-danger"> Pesanan Diterima</span>':'<span class="p-1 bg-danger"> Pembayaran Ditolak</span>')))) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
+				$value->bukti_order ? ($value->validasi == 0 ? $validai : ($value->validasi == '2' ? '<span class="p-1 bg-success"> Pembayaran Diterima</span>' : ($value->validasi == '3' ? '<span class="p-1 bg-info"> Sedang Mengirim</span>': ($value->validasi == '4' ? '<span class="p-1 bg-success"> Pesanan Diterima</span>':'<span class="p-1 bg-danger"> Pembayaran Ditolak</span>')))) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				$ops
 			);
 			$no++;
