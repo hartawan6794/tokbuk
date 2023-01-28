@@ -30,9 +30,7 @@ $error = $session->get('error');
                                 <div class="sm-9">
                                     <input type="date" name="date1" value="" class="form-control">
                                 </div>
-                                <?php if($error) :?>
-                                <p class="sm-3 text-danger control-label"><?= $error->hasError('awal') ? $error->getError('awal') : $error->getError('akhir')  ?></p>
-                                <?php endif;?>
+                                
                             </div>
                         </div>
                     </div>
@@ -46,7 +44,7 @@ $error = $session->get('error');
                             </div>
                         </div>
                     </div>
-                    <?php if (session()->get('username') == 'admin') : ?>
+                    <?php if (session()->get('username') != 'admin') : ?>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="toko">Pilih Toko</label>
@@ -62,7 +60,7 @@ $error = $session->get('error');
                     <div class="col-md-3">
                         <div class="form-group">
                             <button type="reset" name="reset" class="btn btn-flat form-control">Reset</button>
-                            <button type="submit" name="cetak" class="btn btn-info btn-flat form-control">
+                            <button type="submit" name="cetak" target="_blank" class="btn btn-info btn-flat form-control">
                                 <i class="fas fa-print"></i> Cetak
                             </button>
                         </div>

@@ -33,16 +33,32 @@
 		</p>
 		<table cellpadding="6" >
 			<tr>
-				<th><strong>Barang</strong></th>
-				<th><strong>Harga Satuan</strong></th>
-				<th><strong>Jumlah</strong></th>
-				<th><strong>Ongkir</strong></th>
-				<th><strong>Total Harga</strong></th>
+				<th><strong>No</strong></th>
+				<th><strong>Invoice</strong></th>
+				<th><strong>Nama Pelanggan</strong></th>
+				<th><strong>jumlah</strong></th>
+				<th><strong>Harga</strong></th>
+				<th><strong>Total</strong></th>
+				<th><strong>Tanggal Penjualan</strong></th>
 			</tr>
+			<?php
+			 $no = 1;
+			 $befInvoice ='';
+			  foreach($data as $d) :?>
 			<tr>
-
-			</tr>
-		</table>
+					<td><?= $no ?></td>
+					<td><?= $d->invoice != $befInvoice ? $d->invoice : ''?></td>
+					<td class="text-left"><?= $d->nm_user ?></td>
+					<td><?= $d->qty ?></td>
+					<td><?= $d->harga_buku ?></td>
+					<td><?= $d->total ?></td>
+					<td><?= tgl_indO($d->tgl_order) ?></td>
+				</tr>
+				<?php 
+				$befInvoice = $d->invoice;
+				$no++; 
+				endForeach;  ?>
+			</table>
 	</body>
     <script>window.print()</script>
 </html>
