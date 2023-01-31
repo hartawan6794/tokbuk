@@ -90,14 +90,12 @@
                   <p class="text">Keranjang</p>
                 </a>
             </li>
-            <?php endif;?>
               <li class="nav-item">
                 <a href="<?= base_url('order') ?>" class="nav-link <?= $seg == 'order' ? 'active' : '' ?>">
                   <i class="nav-icon fa fa-bag-shopping"></i>
                   <p class="text">Pemesanan</p>
                 </a>
               </li>
-              <?php if (session()->get('username') == 'admin') : ?>
               <li class="nav-item">
                 <a href="<?= base_url('pengiriman') ?>" class="nav-link <?= $seg == 'pengiriman' ? 'active' : '' ?>">
                   <i class="nav-icon fa fa-truck"></i>

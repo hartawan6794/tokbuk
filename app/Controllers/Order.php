@@ -4,7 +4,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-
+use App\Models\OrderDetailModel;
 use App\Models\OrderModel;
 
 
@@ -21,6 +21,7 @@ class Order extends BaseController
 	public function __construct()
 	{
 		$this->orderModel = new OrderModel();
+		$this->orderModelDetail = new OrderDetailModel();
 		$this->validation =  \Config\Services::validation();
 		helper('settings');
 	}
@@ -33,7 +34,7 @@ class Order extends BaseController
 			'title'     		=> 'Menu Pemesanan'
 		];
 
-		if (session()->get('isLogin')) {
+		if (session()->get('isLogin' || session()->get('username') != 'admin')) {
 			return view('order', $data);
 		}else{
 			return view('login');
@@ -76,7 +77,7 @@ class Order extends BaseController
 				rupiah($value->total_pembayaran),
 				$value->bukti_order ? '<button class="btn btn-sm btn-success text-default center" onClick="lihat(' . $value->id_order . ')">Lihat Bukti</button>' : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				// $value->validasi == 0 ? ($value->bukti_order ? '':'Belum Upload') : '-',
-				$value->bukti_order ? ($value->validasi == 0 ? $validai : ($value->validasi == '2' ? '<span class="p-1 bg-success"> Pembayaran Diterima</span>' : ($value->validasi == '3' ? '<span class="p-1 bg-danger"> Sedang Mengirim</span>': ($value->validasi == '4' ? '<span class="p-1 bg-danger"> Pesanan Diterima</span>':'<span class="p-1 bg-danger"> Pembayaran Ditolak</span>')))) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
+				$value->bukti_order ? ($value->validasi == 0 ? $validai : ($value->validasi == '2' ? '<span class="p-1 bg-success"> Pembayaran Diterima</span>' : ($value->validasi == '3' ? '<span class="p-1 bg-info"> Sedang Mengirim</span>': ($value->validasi == '4' ? '<span class="p-1 bg-success"> Pesanan Diterima</span>':'<span class="p-1 bg-danger"> Pembayaran Ditolak</span>')))) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				$ops
 			);
 			$no++;
@@ -94,6 +95,21 @@ class Order extends BaseController
 		if ($this->validation->check($id, 'required|numeric')) {
 
 			$data = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'right')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order')->join('tbl_product tp', 'tp.id_product = tod.id_product', 'left')->where('tbl_order.id_order', $id)->first();
+
+			return $this->response->setJSON($data);
+		} else {
+			throw new \CodeIgniter\Exceptions\PageNotFoundException();
+		}
+	}
+
+	public function getOrderDetail(){
+		$response = array();
+
+		$id = $this->request->getPost('id_order');
+
+		if ($this->validation->check($id, 'required|numeric')) {
+
+			$data = $this->orderModelDetail->select('tp.judul_buku,qty,harga_product,total')->join('tbl_product tp','tbl_order_detail.id_product = tp.id_product')->where('id_order',$id)->findAll();
 
 			return $this->response->setJSON($data);
 		} else {

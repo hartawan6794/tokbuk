@@ -21,7 +21,7 @@ $error = $session->get('error');
             </div>
         </div>
         <div class="card-body">
-            <form action="<?= base_url('report/cetak') ?>" method="post">
+            <form action="<?= base_url('report/cetak') ?>" method="post" target="_blank">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-horizontal">
@@ -44,7 +44,7 @@ $error = $session->get('error');
                             </div>
                         </div>
                     </div>
-                    <?php if (session()->get('username') != 'admin') : ?>
+                    <?php if (session()->get('username') == 'admin') : ?>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="toko">Pilih Toko</label>
@@ -60,7 +60,7 @@ $error = $session->get('error');
                     <div class="col-md-3">
                         <div class="form-group">
                             <button type="reset" name="reset" class="btn btn-flat form-control">Reset</button>
-                            <button type="submit" name="cetak" target="_blank" class="btn btn-info btn-flat form-control">
+                            <button type="submit" name="cetak" class="btn btn-info btn-flat form-control">
                                 <i class="fas fa-print"></i> Cetak
                             </button>
                         </div>
