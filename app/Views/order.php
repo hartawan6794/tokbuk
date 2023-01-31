@@ -142,17 +142,68 @@
   <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Bukti Pembayaran</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Bukti Pemesanan</h5>
         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button> -->
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <div id="detail">
+      <div class="form-group">
+        <div id="detail">
 
-          </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <!-- <input type="hidden" id="id_cuti" name="id_cuti" > -->
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <!-- <button type="submit" class="btn btn-primary">Save</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="detailpemesanan" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Detail Pemesanan</h5>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body table-responsive">
+        <table class="table table-bordered no-margin">
+          <tbody>
+            <tr>
+              <th style="width: 20%;">Invoice</th>
+              <td style="width: 30%;"><span id="invoice"></span></td>
+              <th style="width: 20%;">Waktu Penjualan</th>
+              <td style="width: 30%;"><span id="date"></span></td>
+            </tr>
+            <tr>
+              <th>Pelanggan</th>
+              <td><span id="cust"></span></td>
+              <th>Sub Total</th>
+              <td><span id="sub"></span></td>
+            </tr>
+            <tr>
+              <th>Ke Rekening</th>
+              <td><span id="rek"></span></td>
+              <th>Sub Total Pengiriman</th>
+              <td><span id="subpengiriman"></span></td>
+            </tr>
+            <tr>
+              <th>jenis Pengiriman</th>
+              <td><span id="jenis"></span></td>
+              <th>Total Pembayaran</th>
+              <td><span id="total"></span></td>
+            </tr>
+            <tr>
+              <th>Produk</th>
+              <td colspan="3"><span id="product"></span></td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
       <div class="modal-footer">
         <!-- <input type="hidden" id="id_cuti" name="id_cuti" > -->
@@ -388,7 +439,7 @@
 
   function lihat(id_order) {
     $('#lihatBukti').modal('show');
-    $('.modal-body #detail').html("")
+    $('.form-group #detail').html("")
     $.ajax({
       url: '<?php echo base_url($controller . "/getOne") ?>',
       type: 'post',
@@ -398,13 +449,13 @@
       dataType: 'json',
       success: function(response) {
         // console.log(response.bukti_order);
-        $('.modal-body #detail').html(`<img style='width: 100%;' src='/img/bukti/${response.bukti_order}'>`)
+        $('.form-group #detail').html(`<img style='width: 100%;' src='/img/bukti/${response.bukti_order}'>`)
       }
     });
   }
 
   function detail(id_order) {
-    $('#lihatBukti').modal('show');
+    $('#detailpemesanan').modal('show');
     $('.modal-body #detail').html("")
     $.ajax({
       url: '<?php echo base_url($controller . "/getOne") ?>',
@@ -413,61 +464,32 @@
         id_order: id_order
       },
       dataType: 'json',
-      beforeSend: function() {
-        $('.modal-body #detail').html("Sedang mengambil data")
-      },
       success: function(response) {
-        $(".modal-body #detail").html("");
-        $(".modal-body #detail").append(
-          `
-              <table id="dataTable" class="table table-bordered table-striped">
-                    <tr>
-                        <th>Nomor Invoice</th>
-                        <td>${response.invoice}</td>
-                    </tr>
-                    <tr>
-                        <th>Nama Pelanggan</th>
-                        <td>${response.nm_user}</td>
-                    </tr>
-                    <tr>
-                        <th>Ke Rekening</th>
-                        <td>${response.nm_bank}-${response.no_rek}</td>
-                    </tr>
-                    <tr>
-                        <th>Jenis Pengiriman</th>
-                        <td>${response.jns_pengiriman}</td>
-                    </tr>
-                    <tr>
-                        <th>Judul Buku</th>
-                        <td>${response.judul_buku}</td>
-                    </tr>
-                    <tr>
-                        <th>Jumlah</th>
-                        <td>${response.qty}</td>
-                    </tr>
-                    <tr>
-                        <th>Sub Total</th>
-                        <td>` + convertToRupiah(response.sub_total) + `</td>
-                    </tr>
-                    <tr>
-                        <th>Sub Total Pengiriman</th>
-                        <td>` + convertToRupiah(response.sub_total_pengiriman) + `</td>
-                    </tr>
-                    <tr>
-                        <th>Total Pengiriman</th>
-                        <td>` + convertToRupiah(response.total_pembayaran) + `</td>
-                    </tr>
-                    <tr>
-                        <th>Berat Produk</th>
-                        <td>${response.berat_produk} Kg</td>
-                    </tr>
-                    <tr>
-                        <th>Bukti Pembayaran</th>
-                        <td>` + (response.bukti_order ? `<img style="width: 100%;" src='/img/bukti/${response.bukti_order}'>` : 'Belum Upload Gambar') + `</td>
-                    </tr>
-                </table>
-              `
-        );
+        // console.log(response);
+        $('.modal-body #invoice').text(response.invoice)
+        $('.modal-body #cust').text(response.nm_user)
+        $('.modal-body #date').text(response.tgl_order)
+        $('.modal-body #sub').text(convertToRupiah(response.sub_total))
+        $('.modal-body #rek').text(response.nm_bank + ' - ' + response.no_rek)
+        $('.modal-body #subpengiriman').text(convertToRupiah(response.sub_total_pengiriman))
+        $('.modal-body #jenis').text(response.jns_pengiriman)
+        $('.modal-body #total').text(convertToRupiah(response.total_pembayaran))
+        var product = '<table class="table table-bordered no-margin"> <tr><th>Barang</th><th>Harga</th><th>Qty</th><th>Total</th></tr>'
+        $.ajax({
+          url: '<?php echo base_url($controller . "/getOrderDetail") ?>',
+          type: 'post',
+          data: {
+            id_order: id_order
+          },
+          dataType: 'json',
+          success: function(r) {
+            $.each(r, function(key, val) {
+              product += '<tr><td>' + val.judul_buku + '</td><td>' + convertToRupiah(val.harga_product) + '</td><td>' + val.qty + '</td><td>' + convertToRupiah(val.total) + '</td></tr>'
+            })
+            product += '</table>'
+            $('#product').html(product)
+          }
+        })
       }
     });
 
@@ -480,36 +502,37 @@
     }
   }
 
-  function valid(id_order,validasi){
+  function valid(id_order, validasi) {
     $.ajax({
       url: '<?php echo base_url($controller . "/sendemail") ?>',
       type: 'post',
       data: {
-        id_order : id_order, validasi : validasi
+        id_order: id_order,
+        validasi: validasi
       },
       dataType: 'json',
       success: function(response) {
         if (response.success === true) {
-              Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'success',
-                title: response.messages,
-                showConfirmButton: false,
-                timer: 1500
-              }).then(function() {
-                $('#data_table').DataTable().ajax.reload(null, false).draw(false);
-              })
-            } else {
-              Swal.fire({
-                toast: false,
-                position: 'bottom-end',
-                icon: 'error',
-                title: response.messages,
-                showConfirmButton: false,
-                timer: 3000
-              })
-            }
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: response.messages,
+            showConfirmButton: false,
+            timer: 1500
+          }).then(function() {
+            $('#data_table').DataTable().ajax.reload(null, false).draw(false);
+          })
+        } else {
+          Swal.fire({
+            toast: false,
+            position: 'bottom-end',
+            icon: 'error',
+            title: response.messages,
+            showConfirmButton: false,
+            timer: 3000
+          })
+        }
       }
     });
   }

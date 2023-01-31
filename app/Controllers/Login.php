@@ -21,7 +21,7 @@ class Login extends BaseController
         //     'controller'    	=> 'Dashboard',
         //     'title'     		=> 'Dashboard'				
         // ];
-        if($this->session->get('isLogin')){
+        if(session()->get('isLogin')){
             return redirect()->to('home');
         }else{
             return view('login');
