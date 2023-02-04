@@ -45,7 +45,11 @@ class Order extends BaseController
 	{
 		$response = $data['data'] = array();
 
-		$result = $this->orderModel->select()->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->findAll();
+		// if (session()->get('username') != 'admin'){ {
+			$result = $this->orderModel->select()->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->findAll();
+		// }
+		// }else{
+			// $result = $this->orderModel->select()->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->findAll();
 
 		$no = 1;
 		foreach ($result as $key => $value) {
@@ -77,7 +81,7 @@ class Order extends BaseController
 				rupiah($value->total_pembayaran),
 				$value->bukti_order ? '<button class="btn btn-sm btn-success text-default center" onClick="lihat(' . $value->id_order . ')">Lihat Bukti</button>' : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				// $value->validasi == 0 ? ($value->bukti_order ? '':'Belum Upload') : '-',
-				$value->bukti_order ? ($value->validasi == 0 ? $validai : ($value->validasi == '2' ? '<span class="p-1 bg-success"> Pembayaran Diterima</span>' : ($value->validasi == '3' ? '<span class="p-1 bg-info"> Sedang Mengirim</span>': ($value->validasi == '4' ? '<span class="p-1 bg-success"> Pesanan Diterima</span>':'<span class="p-1 bg-danger"> Pembayaran Ditolak</span>')))) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
+				$value->bukti_order ? (session()->get('username') != 'admin' ? '<span class="p-1 bg-warning"> Sedang Menunggu Validasi</span>' :($value->validasi == 0 ? $validai : ($value->validasi == '2' ? '<span class="p-1 bg-success"> Pembayaran Diterima</span>' : ($value->validasi == '3' ? '<span class="p-1 bg-info"> Sedang Mengirim</span>': ($value->validasi == '4' ? '<span class="p-1 bg-success"> Pesanan Diterima</span>':'<span class="p-1 bg-danger"> Pembayaran Ditolak</span>'))))) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				$ops
 			);
 			$no++;
@@ -109,7 +113,13 @@ class Order extends BaseController
 
 		if ($this->validation->check($id, 'required|numeric')) {
 
-			$data = $this->orderModelDetail->select('tp.judul_buku,qty,harga_product,total')->join('tbl_product tp','tbl_order_detail.id_product = tp.id_product')->where('id_order',$id)->findAll();
+			if (session()->get('username') != 'admin'){ 
+				$data = $this->orderModelDetail->select('tp.judul_buku,qty,harga_product,total')->join('tbl_product tp','tbl_order_detail.id_product = tp.id_product')->join('tbl_toko tt','tt.id_toko = tp.id_toko','left')->where(['id_order'=>$id,'tt.id_user_bio' => session()->get('id_user_bio')])->findAll();
+
+			}else{
+				$data = $this->orderModelDetail->select('tp.judul_buku,qty,harga_product,total')->join('tbl_product tp','tbl_order_detail.id_product = tp.id_product')->where('id_order',$id)->findAll();
+
+			}
 
 			return $this->response->setJSON($data);
 		} else {
