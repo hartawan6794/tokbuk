@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\TokoModel;
 use TCPDF;
+use FPDF\fpdf;
 
 class Report extends BaseController
 {
@@ -74,11 +75,20 @@ class Report extends BaseController
                     WHERE 
                     tgl_order >= "' . $awal . '" AND tgl_order <= "' . $akhir . '"
                     #and kd_file = 1 AND validasi = 4 ';
-                    //    $sql .= $toko ? '':  'AND tt.id_toko = '.$toko;
+            //    $sql .= $toko ? '':  'AND tt.id_toko = '.$toko;
         }
         return $this->db->query($sql)->getResult();
     }
 
+
+    // public function cetak()
+    // {
+    //     $pdf = new FPDF();
+    //     $pdf->AddPage();
+    //     $pdf->SetFont('Arial', 'B', 16);
+    //     $pdf->Cell(40, 10, 'Hello World!');
+    //     $pdf->Output();
+    // }
 
     public function cetak()
     {
@@ -86,7 +96,7 @@ class Report extends BaseController
         $fields['awal'] = $this->request->getPost('date1');
         $fields['akhir'] = $this->request->getPost('date2');
         $fields['toko'] = $this->session->get('username') == 'admin' ? $this->request->getPost('toko') : $this->toko->select('id_toko')->where('id_user_bio',$this->session->get('id_user_bio'))->first()->id_toko;
-        
+
         // var_dump($fields['toko']->id_toko);
         // die;
         //data penjualan

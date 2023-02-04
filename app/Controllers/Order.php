@@ -34,7 +34,7 @@ class Order extends BaseController
 			'title'     		=> 'Menu Pemesanan'
 		];
 
-		if (session()->get('isLogin' || session()->get('username') != 'admin')) {
+		if (session()->get('isLogin')){ 
 			return view('order', $data);
 		}else{
 			return view('login');

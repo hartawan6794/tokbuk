@@ -36,6 +36,7 @@
 			<th><strong>No</strong></th>
 			<th><strong>Invoice</strong></th>
 			<th><strong>Nama Pelanggan</strong></th>
+			<th><strong>Nama Toko</strong></th>
 			<th><strong>Produk</strong></th>
 			<th><strong>Jumlah</strong></th>
 			<th><strong>Harga</strong></th>
@@ -50,6 +51,7 @@
 				<td><?= $d->invoice != $oldInvoice ? $no : '' ?></td>
 				<td style="text-align: left;"><?= $d->invoice != $oldInvoice ? $d->invoice : '' ?></td>
 				<td style="text-align: left;"><?= $d->invoice != $oldInvoice ? $d->nm_user :'' ?></td>
+				<td style="text-align: left;"><?= $d->nm_toko  ?></td>
 				<td style="text-align: left;"><?= $d->judul_buku ?></td>
 				<td><?= $d->qty ?></td>
 				<td style="text-align: right;"><?= $d->harga_buku ? rupiah($d->harga_buku) : '' ?></td>
@@ -67,7 +69,7 @@
 				<td></td>
 				<td></td>
 				<td></td> -->
-				<th colspan="6" style="text-align: right;">Total Pendapatan</th>
+				<th colspan="7" style="text-align: right;">Total Pendapatan</th>
 				<th style="text-align: right;"><?= rupiah($total) ?></th>
 				<td></td>
 			</tr>
