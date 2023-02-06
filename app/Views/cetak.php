@@ -6,6 +6,7 @@
 			font-family: arial, sans-serif;
 			border-collapse: collapse;
 			width: 100%;
+			font-size: 8px;
 		}
 		td,
 		th {
@@ -19,36 +20,31 @@
 
 <body>
 	<?php helper('settings') ?>
-	<div class="float-sm-ed">Bandar Lampung, <?= tgl_indo(date('Y-m-d')) ?></div>
-	<div style="font-size:64px; color:'#dddddd'"><i><?= strtoupper($toko) ?></i></div>
-	<p>
-		<b>Laporan Penjualan</b><br>
-	<p>Per <?= tgl_indo($awal) ?> - <?= tgl_indo($akhir) ?></p>
-	</p>
-	<hr>
+	<div class="col-md-12" style="text-align: right;">Bandar Lampung, <?= tgl_indo(date('Y-m-d')) ?></div>
+	<div style="font-size:54px; color:'#dddddd'"><i><?= strtoupper($toko) ?></i></div>
+	<b>Laporan Penjualan</b>
+	<p style="font-size:10px">Waktu : <?= tgl_indo($awal) ?> - <?= tgl_indo($akhir) ?></p>
+
 	<hr>
 	<p></p>
-	<p>
-
-	</p>
-	<table cellpadding="6">
+	<table cellpadding="4">
 		<tr>
-			<th><strong>No</strong></th>
-			<th><strong>Invoice</strong></th>
-			<th><strong>Nama Pelanggan</strong></th>
+			<th style="width:3%"><strong>No</strong></th>
+			<th style="width:10%"><strong>Invoice</strong></th>
+			<th style="width:12%"><strong>Nama Pelanggan</strong></th>
 			<th><strong>Nama Toko</strong></th>
-			<th><strong>Produk</strong></th>
-			<th><strong>Jumlah</strong></th>
+			<th style="width:20%"><strong>Produk</strong></th>
+			<th style="width:6%"><strong>Jumlah</strong></th>
 			<th><strong>Harga</strong></th>
-			<th><strong>Total</strong></th>
-			<th><strong>Tanggal Penjualan</strong></th>
+			<th style="width:15%"><strong>Total</strong></th>
+			<th style="width:12%"><strong>Tanggal Penjualan</strong></th>
 		</tr>
 		<?php
 		$no = 1;
 		$oldInvoice = '';
 		foreach ($data as $d) : ?>
 			<tr>
-				<td><?= $d->invoice != $oldInvoice ? $no : '' ?></td>
+				<td ><?= $d->invoice != $oldInvoice ? $no : '' ?></td>
 				<td style="text-align: left;"><?= $d->invoice != $oldInvoice ? $d->invoice : '' ?></td>
 				<td style="text-align: left;"><?= $d->invoice != $oldInvoice ? $d->nm_user :'' ?></td>
 				<td style="text-align: left;"><?= $d->nm_toko  ?></td>
@@ -56,7 +52,7 @@
 				<td><?= $d->qty ?></td>
 				<td style="text-align: right;"><?= $d->harga_buku ? rupiah($d->harga_buku) : '' ?></td>
 				<td style="text-align: right;"><?= $d->total ? rupiah($d->total) : '' ?></td>
-				<td style="width: 12%;"><?= $d->invoice != $oldInvoice ? ($d->tgl_order != null ? tgl_indo(date('Y-m-d', strtotime($d->tgl_order))) : '') : '' ?></td>
+				<td ><?= $d->invoice != $oldInvoice ? ($d->tgl_order != null ? tgl_indo(date('Y-m-d', strtotime($d->tgl_order))) : '') : '' ?></td>
 			</tr>
 		<?php
 			$d->invoice != $oldInvoice ? $no++ : '';
@@ -76,8 +72,5 @@
 		</tfoot>
 	</table>
 </body>
-<script>
-	// window.print()
-</script>
 
 </html>
