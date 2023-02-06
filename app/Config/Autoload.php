@@ -43,8 +43,10 @@ class Autoload extends AutoloadConfig
     public $psr4 = [
         APP_NAMESPACE => APPPATH, // For custom app namespace
         'Config'      => APPPATH . 'Config',
+        'Libraries' => APPPATH. 'Libraries',
         'PHPMailer\PHPMailer'  => ROOTPATH . 'vendor/phpmailer/phpmailer/src' ,
-        'FPDF'  => ROOTPATH . 'vendor/FPDF' ,
+        'TCPDF'  => ROOTPATH . 'vendor\tecnickcom\tcpdf' ,
+        // 'FPDF'  => ROOTPATH . 'vendor/FPDF' ,
         
     ];
 
@@ -67,7 +69,10 @@ class Autoload extends AutoloadConfig
      *
      * @var array<string, string>
      */
-    public $classmap = [];
+    public $classmap = [
+        'FPDF'    => APPPATH.'Libraries/fpdf/fpdf.php',
+        'TCPDF'  => ROOTPATH . 'vendor\tecnickcom\tcpdf\tcpdf.php' ,
+    ];
 
     /**
      * -------------------------------------------------------------------
