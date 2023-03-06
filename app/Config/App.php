@@ -101,7 +101,7 @@ class App extends BaseConfig
 
     /**
      * --------------------------------------------------------------------------
-     * Application Timezone
+    * Application Timezon
      * --------------------------------------------------------------------------
      *
      * The default timezone that will be used in your application to display

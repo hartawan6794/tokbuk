@@ -35,7 +35,7 @@
 
 <!-- /Main content -->
 
-<!-- ADD modal content -->
+<!-- Ubah Password Konten -->
 <div id="data-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md">
     <div class="modal-content">
@@ -73,9 +73,7 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div>
-<!-- /ADD modal content -->
-
-
+<!-- /Ubah Password Konten -->
 
 <?= $this->endSection() ?>
 <!-- /.content -->
@@ -137,8 +135,7 @@
         $("#form-btn").text(submitText);
         $('#data-modal').modal('show');
         //insert data to form
-        $("#data-form #id_user").val(response.id_user);
-
+        $("#data-form #id_user").val(response.id_user)
       }
     });
 

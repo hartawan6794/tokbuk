@@ -63,7 +63,6 @@ class AlamatKirim extends BaseController
 			$ops .= '<i class="fa-solid fa-pen-square"></i>  </button>';
 			$ops .= '<div class="dropdown-menu">';
 			$ops .= '<a class="dropdown-item text-info" id="edit-alamat" onClick="save(' . $value->id_alamat . ')"><i class="fa-solid fa-pen-to-square"></i> Ubah</a>';
-			// $ops .= '<a class="dropdown-item text-orange" ><i class="fa-solid fa-copy"></i>   ' .  lang("App.copy")  . '</a>';
 			$ops .= '<div class="dropdown-divider"></div>';
 			$ops .= '<a class="dropdown-item text-danger" onClick="remove(' . $value->id_alamat . ')"><i class="fa-solid fa-trash"></i> Hapus</a>';
 			$ops .= '</div></div>';
@@ -110,7 +109,6 @@ class AlamatKirim extends BaseController
 		$prov = explode("-", $this->request->getPost('provinsi'));
 		$kab = explode("-", $this->request->getPost('kabupaten'));
 
-
 		$fields['id_alamat'] = $this->request->getPost('id_alamat');
 		$fields['id_user_bio'] = $this->request->getPost('id_user_bio');
 		$fields['nm_penerima'] = $this->request->getPost('nm_penerima');
@@ -123,9 +121,7 @@ class AlamatKirim extends BaseController
 		$fields['kelurahan'] = $this->request->getPost('kelurahan');
 		$fields['alamat_rumah'] = $this->request->getPost('alamat_rumah');
 		$fields['postalcode'] = $this->request->getPost('postalcode');
-		// $fields['status'] = $this->request->getPost('status');
-		$fields['created_at'] = $create;;
-		// $fields['updated_at'] = $this->request->getPost('updated_at');
+		$fields['created_at'] = $create;
 
 		$this->validation->setRules([
 			'id_user_bio' => ['label' => 'Id user bio', 'rules' => 'permit_empty|numeric|min_length[0]|max_length[6]'],
@@ -248,7 +244,8 @@ class AlamatKirim extends BaseController
 
 		$key = $this->request->getPost('key');
 		$url = $this->request->getPost('url');
-		// $prov = $this->request->getPost('prov');
+
+		//get api from raja ongkir
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
 			CURLOPT_URL => $url,
@@ -259,8 +256,6 @@ class AlamatKirim extends BaseController
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => "GET",
 			CURLOPT_HTTPHEADER => array(
-				//   "key: your-api-key"
-				// "province : $prov",
 				"key: $key"
 			),
 		));
@@ -277,8 +272,6 @@ class AlamatKirim extends BaseController
 		} else {
 			foreach ($provinsi['rajaongkir'] as $k) {
 				$provData = $k;
-				// foreach($k as $d){
-				// }
 			}
 		}
 
@@ -287,6 +280,7 @@ class AlamatKirim extends BaseController
 
 	function getapiprov($url = null, $key = null, $provinsi_id = null)
 	{
+		//get api from raja ongkir
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
 			CURLOPT_URL => $url,
@@ -297,7 +291,6 @@ class AlamatKirim extends BaseController
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => "GET",
 			CURLOPT_HTTPHEADER => array(
-				//   "key: your-api-key"
 				"key: $key"
 			),
 		));
@@ -314,8 +307,6 @@ class AlamatKirim extends BaseController
 		} else {
 			foreach ($provinsi['rajaongkir'] as $k) {
 				$provData = $k;
-				// foreach($k as $d){
-				// }
 			}
 		}
 

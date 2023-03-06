@@ -17,10 +17,6 @@ class Login extends BaseController
 
     public function index()
     {
-        // $data = [
-        //     'controller'    	=> 'Dashboard',
-        //     'title'     		=> 'Dashboard'				
-        // ];
         if(session()->get('isLogin')){
             return redirect()->to('home');
         }else{
@@ -34,8 +30,8 @@ class Login extends BaseController
         $password = $this->request->getPost('password');
 
         if ($username && $password) {
+            // cek username
             $user = $this->user->where('username', $username)->first();
-            // var_dump($user);die;
 ?>
             <link rel="stylesheet" href="<?= base_url() ?>/asset/css/sweetalert2-dark.min.css">
             <script src="<?= base_url() ?>/asset/js/sweetalert2.min.js"></script>
@@ -66,6 +62,7 @@ class Login extends BaseController
                 <?php
             } else {
                 $userbio = $this->userbio->join('tbl_user tu','tu.nik_user = tbl_user_biodata.nik_user and tu.email_user = tbl_user_biodata.email_user')->where('tu.username', $username)->first();
+                // cek password
                 if ($this->checkPassword($password)) {
                     $session = [
                         'isLogin' => true,
@@ -104,7 +101,6 @@ class Login extends BaseController
                 <?php
                 }
             }
-           // return redirect->to()->('');
         }
     }
 
