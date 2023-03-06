@@ -189,14 +189,14 @@ class Userbiodata extends BaseController
 					'required' => 'Password tidak boleh kosong',
 					'min_length' => 'Password harus lebih dari 4 karakter'
 				]
-			],
-			'confpass' => [
-				'rules' => 'required|matches[pass]',
-				'errors' => [
-					'required' => 'Password konfirmasi harus diisi',
-					'matches' => 'Password konfirmasi tidak sama'
-				]
-			],
+				],
+				'confpass' => [
+					'rules' => 'required|matches[pass]',
+					'errors' => [
+						'required' => 'Password konfirmasi harus diisi',
+						'matches' => 'Password konfirmasi tidak sama'
+					]
+				],
 			'role' => [
 				'rules' => 'required',
 				'errors' => [

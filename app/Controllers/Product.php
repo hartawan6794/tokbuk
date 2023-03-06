@@ -38,8 +38,6 @@ class Product extends BaseController
 			'toko'				=> 	$toko->getResult(),
 			'kategori'	 		=>  $kategori->getResult(),
 		];
-		// var_dump($data);die;
-
 		if (session()->get('isLogin')) {
 			return view('product', $data);
 		} else {
@@ -55,7 +53,6 @@ class Product extends BaseController
 		} else {
 			$result = $this->productModel->select()->join('tbl_toko tt', 'tt.id_toko = tbl_product.id_toko', 'inner')->join('tbl_user_biodata tub', 'tub.id_user_bio = tt.id_user_bio', 'inner')->where('tub.id_user_bio', session()->get('id_user_bio'))->findAll();
 		}
-		// $result = $this->productModel->select()->join('tbl_toko tt', 'tt.id_toko = tbl_product.id_toko', 'inner')->join('tbl_user_biodata tub', 'tub.id_user_bio = tt.id_user_bio', 'inner')->where('tub.id_user_bio', session()->get('id_user_bio'))->findAll();
 		$i = 1;
 
 		foreach ($result as $key => $value) {
@@ -99,8 +96,6 @@ class Product extends BaseController
 				->join('tbl_toko', 'tbl_toko.id_toko = tbl_product.id_toko')
 				->join('tbl_kategori', 'tbl_kategori.id_kategori = tbl_product.id_kategori', 'left')
 				->where('id_product', $id)->first();
-			// var_dump($data);die;
-
 			return $this->response->setJSON($data);
 		} else {
 			throw new \CodeIgniter\Exceptions\PageNotFoundException();
@@ -226,8 +221,6 @@ class Product extends BaseController
 			$data->imgproduct3,
 		];
 
-		// var_dump($fields);
-
 		$this->validation->setRules([
 			'id_toko' => ['label' => 'Id toko', 'rules' => 'required|numeric|min_length[0]|max_length[6]'],
 			'judul_buku' => ['label' => 'Judul buku', 'rules' => 'required|min_length[0]|max_length[255]'],
@@ -249,14 +242,20 @@ class Product extends BaseController
 		} else {
 			$d = 1;
 			$fileName = array();
+
+			//proses cek gambar
 			for ($i = 0; $i < count($img); $i++) {
 				if ($img[$i]->getName() != '') {
 
+					//ketika file ada, menghapus file lama
 					if (file_exists('img/product/' . $imgDelete[$i])) {
 						unlink('img/product/' . $imgDelete[$i]);
 					}
+
+					// rename fie gambar
 					$fileName[$i] = 'product-' . $img[$i]->getRandomName();
 					$fields['imgproduct' . $d] = $fileName[$i];
+					//menyimpan gambar ke server
 					$img[$i]->move(WRITEPATH . '../public/img/product', $fileName[$i]);
 				}
 				$d++;

@@ -2,10 +2,7 @@
 
 <?= $this->section('content') ?>
 <?php $session = session();
-// var_dump($session->get('error'));
-// helper('settings');
 $error = $session->get('error');
-// var_dump($error);die;
 ?>
 <section class="content">
     <div class="card">
@@ -14,10 +11,6 @@ $error = $session->get('error');
                 <div class="col-9 mt-2">
                     <h3 class="card-title">Data Rekening</h3>
                 </div>
-                <!-- <div class="col-3">
-                    <button type="button" class="btn float-sm-end btn-success" onclick="save()" title="Cetak PDF"><i class="fa fa-print"></i> Cetak PDF</button>
-                    <button type="button" class="btn float-sm btn-success" onclick="save()" title="Cetak PDF"><i class="fa fa-print"></i> Cetak PDF</button>
-                </div> -->
             </div>
         </div>
         <div class="card-body">
@@ -30,7 +23,6 @@ $error = $session->get('error');
                                 <div class="sm-9">
                                     <input type="date" name="date1" value="" class="form-control">
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -68,27 +60,6 @@ $error = $session->get('error');
             </form>
         </div>
     </div>
-    <!-- 
-    <div class="card">
-        <div class="card-header with-border">
-            <h7 class="box-title">Filter Data</h7>
-        </div>
-        <div class="card-body">
-            <table id="data_table" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Invoice</th>
-                        <th>Nama Pelanggan</th>
-                        <th>Ke Rekening</th>
-                        <th>Total pembayaran</th>
-                        <th>Bukti Pembayaran</th>
-                        <th></th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div> -->
 
 </section>
 

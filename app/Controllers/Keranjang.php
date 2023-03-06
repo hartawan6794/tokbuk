@@ -61,7 +61,6 @@ class Keranjang extends BaseController
 				$value->harga_buku,
 				rupiah($value->qty * $value->harga_buku),
 				$value->nm_user,
-
 				// $ops
 			);
 		}

@@ -67,8 +67,6 @@
 </div>
 <!-- /ADD modal content -->
 
-
-
 <?= $this->endSection() ?>
 <!-- /.content -->
 
@@ -138,7 +136,6 @@
           //insert data to form
           $("#data-form #id_kategori").val(response.id_kategori);
           $("#data-form #nama_kategori").val(response.nama_kategori);
-
         }
       });
     }

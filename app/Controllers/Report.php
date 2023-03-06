@@ -27,7 +27,6 @@ class Report extends BaseController
                     'title'             => 'Laporan',
                     'toko'              => $this->toko->select('id_toko,nm_toko')->findAll()
                 ];
-                // var_dump($toko);die;
             } else {
                 $data = [
                     'controller'        => 'Laporan',
@@ -51,8 +50,7 @@ class Report extends BaseController
                     inner JOIN tbl_toko tt ON tp.id_toko = tt.id_toko 
                     WHERE 
                     tgl_order >= "' . $awal . '" AND tgl_order <= "' . $akhir . '" AND tt.id_toko = ' . $toko . '
-                    #and kd_file = 1 AND validasi = 4 ';
-            //    $sql .= $toko ? '':  'AND tt.id_toko = '.$toko;
+                    and kd_file = 1 AND validasi = 4 ';
         } else {
             $sql = 'SELECT * FROM tbl_order_detail tod 
                     INNER JOIN tbl_order tor ON tor.id_order = tod.id_order
@@ -61,23 +59,10 @@ class Report extends BaseController
                     inner JOIN tbl_toko tt ON tp.id_toko = tt.id_toko 
                     WHERE 
                     tgl_order >= "' . $awal . '" AND tgl_order <= "' . $akhir . '"
-                    #and kd_file = 1 AND validasi = 4 ';
-            //    $sql .= $toko ? '':  'AND tt.id_toko = '.$toko;
+                    and kd_file = 1 AND validasi = 4 ';
         }
         return $this->db->query($sql)->getResult();
     }
-
-
-    // public function cetak()
-    // {
-
-    //     // $pdf = new FPDF();
-    //     // $pdf->AliasNbPages();
-    //     // $pdf->SetAutoPageBreak(1, 13);
-    //     // $pdf->AddPage('P', 'A4');
-    //     // $this->response->setHeader('Content-Type', 'application/pdf');
-    //     // $pdf->Output('test.pdf', 'F');
-    // }
 
     public function cetak()
     {
@@ -85,12 +70,14 @@ class Report extends BaseController
         $fields['awal'] = $this->request->getPost('date1');
         $fields['akhir'] = $this->request->getPost('date2');
         $fields['toko'] = $this->session->get('username') == 'admin' ? $this->request->getPost('toko') : $this->toko->select('id_toko')->where('id_user_bio', $this->session->get('id_user_bio'))->first()->id_toko;
+
         //data penjualan
         $fields['data'] = $this->getData($fields['awal'], $fields['akhir'], $fields['toko']);
         $total = 0;
         foreach ($fields['data'] as $data) {
             $total += $data->total;
         }
+        
         //validation
         $this->validation->setRules([
             'awal' => ['label' => 'awal', 'rules' => 'required', 'errors' => ['required' => 'Harap memasukan tanggal dengan benar']],

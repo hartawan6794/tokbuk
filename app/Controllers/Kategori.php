@@ -120,7 +120,6 @@ class Kategori extends BaseController
 
 		$this->validation->setRules([
 			'nama_kategori' => ['label' => 'Nama kategori', 'rules' => 'required|min_length[0]|max_length[255]'],
-
 		]);
 
 		if ($this->validation->run($fields) == FALSE) {

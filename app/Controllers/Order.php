@@ -33,7 +33,6 @@ class Order extends BaseController
 			'controller'    	=> 'order',
 			'title'     		=> 'Menu Pemesanan'
 		];
-
 		if (session()->get('isLogin')){ 
 			return view('order', $data);
 		}else{
@@ -50,7 +49,7 @@ class Order extends BaseController
 		}else{
 			$result = $this->orderModel->select()->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->findAll();
 		}
-			
+
 		$no = 1;
 		foreach ($result as $key => $value) {
 
@@ -59,9 +58,6 @@ class Order extends BaseController
 			$ops .= '<i class="fa-solid fa-pen-square"></i>  </button>';
 			$ops .= '<div class="dropdown-menu">';
 			$ops .= '<a class="dropdown-item text-info" onClick="detail(' . $value->id_order . ')"><i class="fa-solid fa-eye"></i>   Detail</a>';
-			// $ops .= '<a class="dropdown-item text-orange" ><i class="fa-solid fa-copy"></i>   ' .  lang("App.copy")  . '</a>';
-			// $ops .= '<div class="dropdown-divider"></div>';
-			// $ops .= '<a class="dropdown-item text-danger" onClick="remove(' . $value->id_order . ')"><i class="fa-solid fa-trash"></i>   ' .  lang("App.delete")  . '</a>';
 			$ops .= '</div></div>';
 
 			$validai = '<div class="btn-group">';
@@ -69,7 +65,6 @@ class Order extends BaseController
 			$validai .= '  Validasi</button>';
 			$validai .= '<div class="dropdown-menu">';
 			$validai .= '<a class="dropdown-item text-info" onClick="valid(' . $value->id_order . ',2)"><i class="fa-solid fa-check"></i>  Terima</a>';
-			// $validai .= '<a class="dropdown-item text-orange" ><i class="fa-solid fa-copy"></i>   ' .  lang("App.copy")  . '</a>';
 			$validai .= '<div class="dropdown-divider"></div>';
 			$validai .= '<a class="dropdown-item text-danger" onClick="valid(' . $value->id_order . ',1)"><i class="fa-solid fa-xmark"></i>   Tolak</a>';
 			$validai .= '</div></div>';
@@ -80,7 +75,6 @@ class Order extends BaseController
 				$value->nm_bank,
 				rupiah($value->total_pembayaran),
 				$value->bukti_order ? '<button class="btn btn-sm btn-success text-default center" onClick="lihat(' . $value->id_order . ')">Lihat Bukti</button>' : '<span class="p-2 bg-warning"> Belum Upload File</span>',
-				// $value->validasi == 0 ? ($value->bukti_order ? '':'Belum Upload') : '-',
 				$value->kd_file ? (session()->get('username') == 'admin' ? ($value->validasi == 0  ? $validai : ($value->validasi == '2' ? '<span class="p-1 bg-success"> Pembayaran Diterima</span>' : ($value->validasi == '3' ? '<span class="p-1 bg-info"> Sedang Mengirim</span>': ($value->validasi == '4' ? '<span class="p-1 bg-success"> Pesanan Diterima</span>':'<span class="p-1 bg-danger"> Pembayaran Ditolak</span>')))): ($value->validasi == '2' ? '<span class="p-1 bg-success"> Pembayaran Diterima</span>' : ($value->validasi == '3' ? '<span class="p-1 bg-info"> Sedang Mengirim</span>': ($value->validasi == '4' ? '<span class="p-1 bg-success"> Pesanan Diterima</span>': ($value->validasi == '1' ?'<span class="p-1 bg-danger"> Pembayaran Ditolak</span>':'<span class="p-1 bg-warning"> Menunggu validasi</span>'))))) : '<span class="p-2 bg-warning"> Belum Upload File</span>',
 				$ops
 			);
@@ -115,10 +109,8 @@ class Order extends BaseController
 
 			if (session()->get('username') != 'admin'){ 
 				$data = $this->orderModelDetail->select('tp.judul_buku,qty,harga_product,total')->join('tbl_product tp','tbl_order_detail.id_product = tp.id_product')->join('tbl_toko tt','tt.id_toko = tp.id_toko','left')->where(['id_order'=>$id,'tt.id_user_bio' => session()->get('id_user_bio')])->findAll();
-
 			}else{
 				$data = $this->orderModelDetail->select('tp.judul_buku,qty,harga_product,total')->join('tbl_product tp','tbl_order_detail.id_product = tp.id_product')->where('id_order',$id)->findAll();
-
 			}
 
 			return $this->response->setJSON($data);
@@ -144,7 +136,6 @@ class Order extends BaseController
 		$fields['validasi'] = $this->request->getPost('validasi');
 		$fields['created_at'] = date('Y-m-d H:i:s');
 		$fields['updated_at'] = $this->request->getPost('updated_at');
-
 
 		$this->validation->setRules([
 			'invoice' => ['label' => 'Invoice', 'rules' => 'permit_empty|min_length[0]|max_length[20]'],
@@ -200,7 +191,6 @@ class Order extends BaseController
 		$fields['validasi'] = $this->request->getPost('validasi');
 		$fields['created_at'] = $this->request->getPost('created_at');
 		$fields['updated_at'] = $this->request->getPost('updated_at');
-
 
 		$this->validation->setRules([
 			'invoice' => ['label' => 'Invoice', 'rules' => 'permit_empty|min_length[0]|max_length[20]'],
@@ -274,19 +264,17 @@ class Order extends BaseController
 
 		$dataOrder = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'left')->where('id_order', $data['id_order'])->first();
 
+		//cek validasi dan kirim pesan
 		if ($data['validasi'] == '1') {
 			$message        = "Pembayaran di tolak
-			Invoice : " . $dataOrder->invoice . "
-
-			
+			Invoice : " . $dataOrder->invoice . "			
 			PESAN NO-REPLAY";
 		} else {
 			$message        = "Pembayaran di terima
 			Invoice : " . $dataOrder->invoice . "
-
-
 			PESAN NO-REPLAY";
 		}
+
 		// Create an instance; passing `true` enables exceptions
 		$mail = new PHPMailer(true);
 

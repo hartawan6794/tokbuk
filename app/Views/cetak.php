@@ -60,11 +60,6 @@
 		endforeach;  ?>
 		<tfoot>
 			<tr>
-				<!-- <td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td> -->
 				<th colspan="7" style="text-align: right;">Total Pendapatan</th>
 				<th style="text-align: right;"><?= rupiah($total) ?></th>
 				<td></td>
