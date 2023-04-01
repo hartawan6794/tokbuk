@@ -133,6 +133,7 @@ class Userbiodata extends BaseController
 			'role' => $fields['role'],
 			'created_at' => $create
 		);
+		
 
 		$this->validation->setRules([
 			'nik_user' => ['label' => 'Nik user', 'rules' => 'required|min_length[0]|max_length[20]|nikExist[nik_user]', 'errors' => [
