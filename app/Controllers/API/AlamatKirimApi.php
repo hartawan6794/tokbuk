@@ -62,7 +62,7 @@ class AlamatKirimApi extends BaseController
 
 	}
 
-	public function edit(){
+	public function edit(){ 
         $response = array();
 		$create = date('Y-m-d H:i:s');
 		$fields['id_alamat'] = $this->request->getPostGet('id_alamat');
