@@ -44,12 +44,50 @@ $routes->get('/', 'Home::index');
 //     $routes->get('(:any)', 'Userbio::form');
 //     $routes->post('prosses', 'Userbio::prosses');
 // });
-// $routes->group('user',function ($routes){
-//     $routes->get('/', 'user::index');
-//     $routes->get('(:any)', 'user::form');
-//     $routes->post('prosses', 'user::prosses');
-// });
-$routes->get('api/userapi','Api\UserApi::index');
+$routes->group('alamatapi',function ($routes){
+    $routes->match(['get','post'],'add', 'Api\AlamatKirimApi::Add');
+    $routes->match(['get','post'],'edit', 'Api\AlamatKirimApi::Edit');
+    $routes->match(['get','post'],'getone', 'Api\AlamatKirimApi::getOne');
+});
+
+$routes->group('cartapi',function ($routes){
+    $routes->match(['get','post'],'/', 'Api\CartApi::Index');
+    $routes->match(['get','post'],'addcart', 'Api\CartApi::addCart');
+    $routes->match(['get','post'],'countcart', 'Api\CartApi::countCart');
+    $routes->match(['get','post'],'hapuscart', 'Api\CartApi::hapuscart');
+    $routes->match(['get','post'],'updateqty', 'Api\CartApi::updateQty');
+    $routes->match(['get','post'],'getCart', 'Api\CartApi::getCart');
+});
+
+$routes->group('orderapi',function ($routes){
+    $routes->match(['get','post'],'/', 'Api\OrderApi::Index');
+    $routes->match(['get','post'],'getOngkir', 'Api\OrderApi::getOngkir');
+    $routes->match(['get','post'],'input', 'Api\OrderApi::input');
+    $routes->match(['get','post'],'getPemesanan', 'Api\OrderApi::getPemesanan');
+    $routes->match(['get','post'],'getPemesananDetail', 'Api\OrderApi::getPemesananDetail');
+    $routes->match(['get','post'],'hapusPesanan', 'Api\OrderApi::hapusPesanan');
+    $routes->match(['get','post'],'upload', 'Api\OrderApi::upload');
+    $routes->match(['get','post'],'updatePesananDiterima', 'Api\OrderApi::updatePesananDiterima');
+    $routes->match(['get','post'],'getOrderSelesai', 'Api\OrderApi::getOrderSelesai');
+    $routes->match(['get','post'],'kirimRating', 'Api\OrderApi::kirimRating');
+});
+
+$routes->group('produkapi',function ($routes){
+    $routes->match(['get','post'],'/', 'Api\ProdukApi::Index');
+    $routes->match(['get','post'],'kategori', 'Api\ProdukApi::kategori');
+    $routes->match(['get','post'],'getRekening', 'Api\ProdukApi::getRekening');
+});
+
+$routes->group('userapi',function ($routes){
+    $routes->match(['get','post'],'/', 'Api\UserApi::Index');
+    $routes->match(['get','post'],'login', 'Api\UserApi::login');
+    $routes->match(['get','post'],'getOneUser', 'Api\UserApi::getOneUser');
+    $routes->match(['get','post'],'register', 'Api\UserApi::register');
+    $routes->match(['get','post'],'upload', 'Api\UserApi::upload');
+    $routes->match(['get','post'],'edit', 'Api\UserApi::edit');
+});
+
+$routes->get('api/userapi','Api\AlamatKirimApi::getOne');
 
 /*
  * --------------------------------------------------------------------
