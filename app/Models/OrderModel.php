@@ -35,5 +35,5 @@ class OrderModel extends Model {
         $invoice = "TB".date('dmy').$no;
         return $invoice;
     }
-	
+
 }

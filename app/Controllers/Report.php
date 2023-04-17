@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\TokoModel;
 use TCPDF;
-use FPDF;
 
 class Report extends BaseController
 {
