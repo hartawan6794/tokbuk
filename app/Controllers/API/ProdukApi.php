@@ -61,7 +61,7 @@ class ProdukApi extends BaseController
         return $this->response->setJSON($response);
     }
 
-    public function ()
+    public function getRekening()
     {
         $response = array();
         $data = $this->rek->select()->findAll();
