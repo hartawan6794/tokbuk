@@ -182,18 +182,24 @@
             <tr>
               <th>Pelanggan</th>
               <td><span id="cust"></span></td>
+              <th>jenis Pengiriman</th>
+              <td><span id="jenis"></span></td>
+            </tr>
+            <tr>
+              <th>No Telpon</th>
+              <td><span id="no_telp"></span></td>
               <th>Sub Total</th>
               <td><span id="sub"></span></td>
             </tr>
             <tr>
-              <th>Ke Rekening</th>
-              <td><span id="rek"></span></td>
+              <th>Alamat</th>
+              <td><span id="alamat"></span></td>
               <th>Sub Total Pengiriman</th>
               <td><span id="subpengiriman"></span></td>
             </tr>
             <tr>
-              <th>jenis Pengiriman</th>
-              <td><span id="jenis"></span></td>
+              <th>Ke Rekening</th>
+              <td><span id="rek"></span></td>
               <th>Total Pembayaran</th>
               <td><span id="total"></span></td>
             </tr>
@@ -206,9 +212,6 @@
 
       </div>
       <div class="modal-footer">
-        <!-- <input type="hidden" id="id_cuti" name="id_cuti" > -->
-        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <!-- <button type="submit" class="btn btn-primary">Save</button> -->
       </div>
     </div>
   </div>
@@ -474,6 +477,8 @@
         $('.modal-body #subpengiriman').text(convertToRupiah(response.sub_total_pengiriman))
         $('.modal-body #jenis').text(response.jns_pengiriman)
         $('.modal-body #total').text(convertToRupiah(response.total_pembayaran))
+        $('.modal-body #no_telp').text(response.telp_penerima)
+        $('.modal-body #alamat').text(response.alamat_rumah+','+response.kelurahan+','+response.kecamatan+','+response.kabupaten+','+response.provinsi)
         var product = '<table class="table table-bordered no-margin"> <tr><th>Barang</th><th>Harga</th><th>Qty</th><th>Total</th></tr>'
         $.ajax({
           url: '<?php echo base_url($controller . "/getOrderDetail") ?>',

@@ -92,7 +92,7 @@ class Order extends BaseController
 
 		if ($this->validation->check($id, 'required|numeric')) {
 
-			$data = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'right')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order')->join('tbl_product tp', 'tp.id_product = tod.id_product', 'left')->where('tbl_order.id_order', $id)->first();
+			$data = $this->orderModel->join('tbl_user_biodata tub', 'tub.id_user_bio = tbl_order.id_user_bio', 'right')->join('tbl_rekening tr', 'tr.id_rekening = tbl_order.id_rekening', 'left')->join('tbl_order_detail tod', 'tod.id_order = tbl_order.id_order')->join('tbl_product tp', 'tp.id_product = tod.id_product', 'left')->join('tbl_alamat ta','tub.id_user_bio = ta.id_user_bio')->where('tbl_order.id_order', $id)->first();
 
 			return $this->response->setJSON($data);
 		} else {
