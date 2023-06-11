@@ -28,7 +28,7 @@ class Toko extends BaseController
 		if (session()->get('isLogin')) {
 
 			if (session()->get('username') == 'admin') {
-				$userbio = $this->user->select('*')->join('tbl_user_biodata', 'tbl_user.username = tbl_user_biodata.nik_user')->where('tbl_user.role', '1')->get();
+				$userbio = $this->user->select('*')->join('tbl_user_biodata', 'tbl_user.nik_user = tbl_user_biodata.nik_user')->where('tbl_user.role', '1')->get();
 			} else {
 				$userbio = $this->user->select('*')->join('tbl_user_biodata', 'tbl_user.nik_user = tbl_user_biodata.nik_user')->where(['tbl_user.role' => '1',
 				'tbl_user.username' => session()->get('username')])->get();
