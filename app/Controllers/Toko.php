@@ -33,13 +33,11 @@ class Toko extends BaseController
 				$userbio = $this->user->select('*')->join('tbl_user_biodata', 'tbl_user.nik_user = tbl_user_biodata.nik_user')->where(['tbl_user.role' => '1',
 				'tbl_user.username' => session()->get('username')])->get();
 			}
-			// var_dump($userbio->getResult());die;
 			$data = [
 				'controller'    	=> 'toko',
 				'title'     		=> 'Toko',
 				'userbio'			=> $userbio->getResult()
 			];
-			// var_dump($data);die;
 			return view('toko', $data);
 		} else {
 			return view('login');
