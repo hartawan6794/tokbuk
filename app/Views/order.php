@@ -201,7 +201,7 @@
               <td><span id="total"></span></td>
             </tr>
             <tr>
-              <th>Alamat</th>
+              <th style="text-transform:capitalize">Alamat</th>
               <td><span id="alamat"></span></td>
             </tr>
             <tr>
@@ -219,11 +219,8 @@
 </div>
 <!-- /ADD modal content -->
 
-
-
 <?= $this->endSection() ?>
 <!-- /.content -->
-
 
 <!-- page script -->
 <?= $this->section("pageScript") ?>
@@ -470,6 +467,7 @@
       dataType: 'json',
       success: function(response) {
         // console.log(response);
+        var alamat = response.alamat_rumah + '<br>Kelurahan ' + response.kelurahan + ', Kecamatan ' + response.kecamatan + ',Kabupaten ' + response.kabupaten + ',' + response.provinsi+'<br> No. Telp - '+response.telp_penerima;
         $('.modal-body #invoice').text(response.invoice)
         $('.modal-body #cust').text(response.nm_user)
         $('.modal-body #date').text(response.tgl_order)
@@ -478,8 +476,7 @@
         $('.modal-body #subpengiriman').text(convertToRupiah(response.sub_total_pengiriman))
         $('.modal-body #jenis').text(response.jns_pengiriman)
         $('.modal-body #total').text(convertToRupiah(response.total_pembayaran))
-        // $('.modal-body #no_telp').text(response.telp_penerima)
-        $('.modal-body #alamat').text(response.alamat_rumah + ',' + response.kelurahan + ',' + response.kecamatan + ',' + response.kabupaten + ',' + response.provinsi+'\n No. Telp - '+response.telp_penerima);
+        $('.modal-body #alamat').html(alamat)
         var product = '<table class="table table-bordered no-margin"> <tr><th>Barang</th><th>Harga</th><th>Qty</th><th>Total</th></tr>'
         $.ajax({
           url: '<?php echo base_url($controller . "/getOrderDetail") ?>',
